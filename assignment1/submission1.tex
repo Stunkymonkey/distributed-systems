@@ -22,7 +22,7 @@
 
 
 \rhead{{\newcommand\and\\\getauthors}}
-\author{Felix Bühler\\2973410 \and Clemens Lieb\\xxxxxxx \and Steffen Wonner\\2862123 \and Fabian Bühler\\xxxxxxx}
+\author{Felix Bühler\\2973410 \and Clemens Lieb\\xxxxxxx \and Steffen Wonner\\2862123 \and Fabian Bühler\\2953320}
 \lhead{\textbf\gettitle}
 \title{\gettitle}
 \chead{\getsubtitle}
@@ -41,17 +41,17 @@
 
 \section*{1 Transparency Levels}
 \subsection*{a)}
-The access is location transparent, because the location is hidden behinde an unresolved URL. 
+The access is location transparent, because the location is hidden behinde an unresolved URL.
 \subsection*{b)}
 The service is not replication transparent because ther is a unique link for every location that has to be checked separatly.
 \subsection*{c)}
-The access is replication transparent, because it is not apparent if Otto checking one or multiple web services. 
+The access is replication transparent, because it is not apparent if Otto checking one or multiple web services.
 \subsection*{d)}
 \subsubsection*{i.}
 It is only possible to write all copys at once so all copys are allways the same. That means independent from when or which copy is read the answer is allways up to date.
 \subsubsection*{ii.}
 Write operations are performed on n-1 copies.
-Read operations are performed on 2 copies, the client acceptes the new version. 
+Read operations are performed on 2 copies, the client acceptes the new version.
 
 \section*{2 System Models}
 \subsection*{a)}
@@ -73,20 +73,33 @@ The worst-case is n * $ \delta $t as $ \delta $t is reserved for every prozess a
 \subsection*{b)}
 
 \section*{4 System Availability}
-\subsection*{a)}
-$ A_x = \dfrac{80t}{100t} = 80\% $
 
-$ A_y = \dfrac{60t}{100t} = 60\%$
-\subsection*{b)}
+\begin{enumerate}[a)]
+	\item $ A_x = \dfrac{80t}{100t} = 80\% $
 
-$ A_{A_x|A_y} = \dfrac{80t}{100t} = 80\% $
-\subsection*{c)}
-$ P(A_i, A_j) = $ observing node $ A_i $ as up given that node $ A_j $ is up
+		$ A_y = \dfrac{60t}{100t} = 60\%$
 
-$ P(A_x|A_y) = \dfrac{60t}{60t} = 100\% \rightarrow$ not dependent
+	\item Overall statistical availability:
 
-$ P(A_y|A_x) = \dfrac{60t}{80t} = 75\% \rightarrow$ is dependent
-\subsection*{d)}
-The availability depends on $ A_x = 80\% $ which is equal to $ A_{A_x|A_y} $.
+		$ A_S = 1 - P(Y=\text{down} \cup X=\text{down}) = 1 - ((1 - A_x) \cdot (1 - A_y)) = 1 - (0.2 \cdot 0.4) = 1 - 0.08 = 0.92 = 92\%$
+
+		Availability in the concrete example:
+
+		$ A_S = \dfrac{80t}{100t} = 80\% $
+
+	\item $ P(Y=\text{up}|X=\text{up}) = \frac{P(Y=\text{up} \cap X=\text{up})}{P(X=\text{up})} = \frac{0.6}{0.8} = 75\% $
+
+		$ P(Y=\text{up}|X=\text{down}) = \frac{P(Y=\text{up} \cap X=\text{down})}{P(X=\text{down})} = \frac{0}{0.2} = 0\% $
+
+		Node $Y$ seems to depend on Node $X$ to be available.
+
+	\item The availability of the system ($ A_S $) depends on the node $X$.
+
+		$ A_S = P(Y=\text{up} \cup X=\text{up}) = P(X=\text{up}) = A_X = 0.8 $
+
+		This is different from the result in b) ($ A_S = 0.92 $) where the assumption was that the nodes have independent failures.
+		If the nodes are dependent then the overall system can not achieve a higher availability than any one of the nodes.
+
+\end{enumerate}
 
 \end{document}
