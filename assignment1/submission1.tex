@@ -22,7 +22,7 @@
 
 
 \rhead{{\newcommand\and\\\getauthors}}
-\author{Felix Bühler\\2973410 \and Clemens Lieb\\xxxxxxx \and Deus\\xxxxxxx \and Fabian Bühler\\xxxxxxx}
+\author{Felix Bühler\\2973410 \and Clemens Lieb\\xxxxxxx \and Steffen Wonner\\2862123 \and Fabian Bühler\\xxxxxxx}
 \lhead{\textbf\gettitle}
 \title{\gettitle}
 \chead{\getsubtitle}
@@ -41,17 +41,32 @@
 
 \section*{1 Transparency Levels}
 \subsection*{a)}
+The access is location transparent, because the location is hidden behinde an unresolved URL. 
 \subsection*{b)}
+The service is not replication transparent because ther is a unique link for every location that has to be checked separatly.
 \subsection*{c)}
+The access is replication transparent, because it is not apparent if Otto checking one or multiple web services. 
 \subsection*{d)}
 \subsubsection*{i.}
+It is only possible to write all copys at once so all copys are allways the same. That means independent from when or which copy is read the answer is allways up to date.
 \subsubsection*{ii.}
+Write operations are performed on n-1 copies.
+Read operations are performed on 2 copies, the client acceptes the new version. 
 
 \section*{2 System Models}
 \subsection*{a)}
+\begin{itemize}
+	\item No message is lost
+	\item The maximal possible delay is known
+\end{itemize}
 \subsection*{b)}
 \subsubsection*{i.}
+Every process i sends its own messages at time i * δt:
+t\textsubscript{i}\textsuperscript{send}(m) = i * δt
+The tranmission of a given message is not longer than δt, so if a process i starts sending after i * δt every process with a lower id has allready finished and all processes know there messages.
 \subsubsection*{ii.}
+The worst-case is n * δt as δt is reserved for every prozess as time to send und δt is the loangest time a prozess needs for transmitting a message
+
 
 \section*{3 Three-Army-Problem}
 \subsection*{a)}
