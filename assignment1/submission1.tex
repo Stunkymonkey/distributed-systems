@@ -61,11 +61,11 @@ Read operations are performed on 2 copies, the client acceptes the new version.
 \end{itemize}
 \subsection*{b)}
 \subsubsection*{i.}
-Every process i sends its own messages at time i * δt:
-t\textsubscript{i}\textsuperscript{send}(m) = i * δt
-The tranmission of a given message is not longer than δt, so if a process i starts sending after i * δt every process with a lower id has allready finished and all processes know there messages.
+Every process i sends its own messages at time $ i * \delta t$:
+t\textsubscript{i}\textsuperscript{send}(m) = $ i * \delta t $
+The tranmission of a given message is not longer than $ \delta $t, so if a process i starts sending after i * $ \delta $t every process with a lower id has allready finished and all processes know there messages.
 \subsubsection*{ii.}
-The worst-case is n * δt as δt is reserved for every prozess as time to send und δt is the loangest time a prozess needs for transmitting a message
+The worst-case is n * $ \delta $t as $ \delta $t is reserved for every prozess as time to send und $ \delta $t is the loangest time a prozess needs for transmitting a message
 
 
 \section*{3 Three-Army-Problem}
