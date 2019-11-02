@@ -22,7 +22,7 @@
 
 
 \rhead{{\newcommand\and\\\getauthors}}
-\author{Felix Bühler\\2973410 \and Clemens Lieb\\xxxxxxx \and Steffen Wonner\\2862123 \and Fabian Bühler\\2953320}
+\author{Felix Bühler\\2973410 \and Clemens Lieb\\3130838 \and Steffen Wonner\\2862123 \and Fabian Bühler\\2953320}
 \lhead{\textbf\gettitle}
 \title{\gettitle}
 \chead{\getsubtitle}
@@ -41,17 +41,20 @@
 
 \section*{1 Transparency Levels}
 \subsection*{a)}
-The access is location transparent, because the location is hidden behinde an unresolved URL.
+The access is location transparent, because the location is hidden behind an unresolved URL.
+The actual adress of the webservice is automatically resolved through DNS acting as service discovery mechanism.
 \subsection*{b)}
-The service is not replication transparent because ther is a unique link for every location that has to be checked separatly.
+The service is not replication transparent because there is a unique name for every location that has to be checked separatly.
 \subsection*{c)}
-The access is replication transparent, because it is not apparent if Otto checking one or multiple web services.
+The access is replication transparent, because it is not apparent whether Otto checks one or multiple web services.
+It's furthermore unknown which of the two replication locations did provide the file in the end.
 \subsection*{d)}
 \subsubsection*{i.}
-It is only possible to write all copys at once so all copys are allways the same. That means independent from when or which copy is read the answer is allways up to date.
+It is only possible to write all copies at once so all copies are always the same.
+This iplies that independently from when or which copy is read the answer is always up to date.
 \subsubsection*{ii.}
-Write operations are performed on n-1 copies.
-Read operations are performed on 2 copies, the client acceptes the new version.
+Write operations are performed on \(n-1\) copies, as required by the locking constraints.
+Read operations are performed on \(2\) different randomly selected copies, the client accepts the "latest available" version.
 
 \section*{2 System Models}
 \subsection*{a)}
