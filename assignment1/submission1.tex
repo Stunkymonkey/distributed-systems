@@ -75,7 +75,73 @@ The final component is assuming the maximum clock skew between \(P_1 \text{ and 
 
 \section*{3 Three-Army-Problem}
 \subsection*{a)}
+To enable a resolution the failure model should exclude both crashing and byzantine failures.
+General Omissions, so long as their occurences are bounded, can be resolved by retrying communication sufficiently often.
 \subsection*{b)}
+\par{Phase 1: Determining order of attack}
+The initiating division sends a messenger with it's own size and the time \(t_0\) to both other divisions.
+A division receiving a first message with a division size sends it's division size to the two other divisions.
+If it has received two messages, it calculates the order of attack.
+If it is the largest division it initiates Phase 2.
+\par{Phase 2: Attack coordination}
+The largest division is definitively known at \(t_1 = t_0 + r, r \leq 2d\).
+The largest division attacks at \(t_1\) and sends a message with that time to both other divisions.
+The second largest division attacks at time \(t_2 = t_1 + k\), the smallest division attacks at \(t_3 = t_1 + 2k = t_2 + k\).
+
+Since all clocks are perfectly synchronized we only need to consider message delivery times.
+\(t_1\) is minimal, because it's the first moment that the largest division is known to be the largest.
+Since all divisions must have sent their size \emph{before} \(t_1\) -- otherwise the information would not be available -- all divisions know their position in the order of attack at \(t_1 + d < t_1 + k\), which implies that \(t_2 > t_1 + d\) as required to allow the second division to attack at the specified time.
+And because all attacks must be at least \(k\) apart, \(2k\) is the minimal span of time between the first and last attack.
+
+\begin{tikzpicture}
+	% division identifiers
+	\node[draw, circle] at (0, 5)   (D1) {\(D_1\)};
+	\node[draw, circle] at (0, 2.5) (D2) {\(D_2\)};
+	\node[draw, circle] at (0, 0)   (D3) {\(D_3\)};
+	% division timelines
+	\path[draw,->]
+		(D1) -- (12, 5)
+		(D2) -- (12, 2.5)
+		(D3) -- (12, 0);
+	% message 1 at t_0
+	\node[draw, circle, fill=black] at (1, 5) (M1) {};
+	\node[above=1.2, right=0.2]     at (1, 5) {\(t_0\)};
+	% message 2 (coming from d3)
+	\node[draw, circle, fill=black] at (2, 0) (M2) {};
+	% message 3 (coming from d2)
+	\node[draw, circle, fill=black] at (3, 2.5) (M3) {};
+	\node[above=1]                  at (3, 2.5) {\(t_1\)};
+	% attack message (assuming d1 is largest and last to know)
+	\node[draw, circle, fill=red] at (5, 5) (MA) {};
+	% attack timings
+	\node[draw, circle, fill=red] at (7.5, 2.5) {};
+	\node[draw, circle, fill=red] at (10,  0) {};
+	% message delivery
+	\path[draw, ->]
+		(M1) edge node[above, sloped] {\(\leq d\)} (M3)
+		(M1) edge node[above, sloped] {\(\leq d\)} (M2)
+		(M2) edge node[below, sloped] {\(\leq d\)} (4.5, 2.5)
+		(M2) edge node[below, sloped] {\(\leq d\)} (MA)
+		(M3) edge node[above, sloped] {\(\leq d\)} (4, 5)
+		(M3) edge node[above, sloped] {\(\leq d\)} (4, 0)
+		(MA) edge node[above, sloped] {\(\leq d\)} (6.5, 0)
+		(MA) edge node[above, sloped] {\(\leq d\)} (7, 2.5)
+		;
+	\path[draw, dashed]
+		% t_1 possible area
+		(4, 6) -- (4, -1)
+		(5, 6) -- (5, -1)
+		% t_2
+		(7.5, 6) -- (7.5, -1)
+		% t_3
+		(10, 6) -- (10, -1)
+		;
+	\node at (4, 6) {\parbox{1.8cm}{Range of possible \(t_1\)}};
+	\node at (5, -1.5) {\(t_1\)};
+	\node at (7.5, -1.5) {\(t_2\)};
+	\node at (10, -1.5) {\(t_3\)};
+	
+\end{tikzpicture}
 
 \section*{4 System Availability}
 
