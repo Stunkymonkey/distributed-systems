@@ -60,16 +60,18 @@ Read operations are performed on \(2\) different randomly selected copies, the c
 \subsection*{a)}
 \begin{itemize}
 	\item No message is lost
-	\item The maximal possible delay is known
+	\item The maximum possible delay is known
+	\item There is a limited amount of clock skew between the processes
 \end{itemize}
 \subsection*{b)}
 \subsubsection*{i.}
-Every process i sends its own messages at time $ i * \delta t$:
-t\textsubscript{i}\textsuperscript{send}(m) = $ i * \delta t $
-The tranmission of a given message is not longer than $ \delta $t, so if a process i starts sending after i * $ \delta $t every process with a lower id has allready finished and all processes know there messages.
+Assuming a limited clock skew of \(\delta c\) between the processes, the process \(P_i\) sends a broadcast message \(2 * \delta c + \delta t\) time units after receiving \(i - 1\) messages.
+This allows for instant delivery to a process skewed by the maximum amount of time ''forwards'' while keeping the order of messages intact when sending the message even with the maximum delay \(\delta t\) to a process skewed by the maximum amount of time ''backwards''.
 \subsubsection*{ii.}
-The worst-case is n * $ \delta $t as $ \delta $t is reserved for every prozess as time to send und $ \delta $t is the loangest time a prozess needs for transmitting a message
-
+In the worst case, the synchronization protocol takes \(2n (\delta t + \delta c) + 2\delta c\) time units.
+This assumes that all messages take the maximum possible amount of time to deliver, namely \(n delta t\) overall, with clock skew cancelling itself out across all processes.
+Adding the wait-time for each process \(n(\delta t + 2\delta c)\) yields \(2n (\delta t + \delta c)\).
+The final component is assuming the maximum clock skew between \(P_1 \text{ and } P_n\).
 
 \section*{3 Three-Army-Problem}
 \subsection*{a)}
