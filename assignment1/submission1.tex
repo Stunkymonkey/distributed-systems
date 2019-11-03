@@ -1,7 +1,7 @@
 \documentclass{scrartcl}
 \usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
-\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=4cm]{geometry}
 \usepackage[ngerman]{babel}
 \usepackage{amsmath, amsthm, amssymb, amstext}
 \usepackage{listings}
@@ -81,6 +81,8 @@ It's furthermore unknown which of the two replication locations did provide the 
 		Clock skew can be ignored here as we do not compare the timestamps of the first send with the last receive.
 \end{enumerate}
 
+\pagebreak
+
 \section*{3 Three-Army-Problem}
 \subsection*{a)}
 To enable a resolution the failure model should exclude both crashing and byzantine failures.
@@ -153,6 +155,8 @@ And because all attacks must be at least \(k\) apart, \(2k\) is the minimal span
 	\node at (10, -1.5) {\(t_3\)};
 	
 \end{tikzpicture}
+
+\pagebreak
 
 \section*{4 System Availability}
 
