@@ -1,7 +1,7 @@
 \documentclass{scrartcl}
 \usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
-\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=4cm]{geometry}
 \usepackage[ngerman]{babel}
 \usepackage{amsmath, amsthm, amssymb, amstext}
 \usepackage{listings}
@@ -42,41 +42,52 @@
 \section*{1 Transparency Levels}
 \subsection*{a)}
 The access is location transparent, because the location is hidden behind an unresolved URL.
-The actual adress of the webservice is automatically resolved through DNS acting as service discovery mechanism.
+The actual address of the webservice is automatically resolved through DNS acting as service discovery mechanism.
+Also the actual song is referenced by title and not by a specific location.
 \subsection*{b)}
-The service is not replication transparent because there is a unique name for every location that has to be checked separatly.
+The service is not replication transparent because there is a unique name for every location that has to be checked separately.
+The client has to know all available replications for this to work.
 \subsection*{c)}
 The access is replication transparent, because it is not apparent whether Otto checks one or multiple web services.
 It's furthermore unknown which of the two replication locations did provide the file in the end.
 \subsection*{d)}
-\subsubsection*{i.}
-It is only possible to write all copies at once so all copies are always the same.
-This iplies that independently from when or which copy is read the answer is always up to date.
-\subsubsection*{ii.}
-Write operations are performed on \(n-1\) copies, as required by the locking constraints.
-Read operations are performed on \(2\) different randomly selected copies, the client accepts the "latest available" version.
+\begin{enumerate}[i.]
+	\item It is only possible to write to all copies at once so all copies will always have the same value.
+		This implies that independently from when or which copy is read the answer is always up to date.
+	\item Write operations are performed on \(n-1\) copies, as required by the locking constraints (only locks for these \(n-1\) copies are acquired).
+		A write operation also marks the time when the value was updated.
+		Read operations are performed on \(2\) different randomly selected copies, the client accepts the "newer" version according to the timestamps of the updates.
+		The reading operation only needs to lock the two selected copies.
+\end{enumerate}
+
 
 \section*{2 System Models}
 \subsection*{a)}
 \begin{itemize}
+	\item There are no node failures
 	\item No message is lost
-	\item The maximum possible delay is known
+	\item The maximum possible delay has a known upper bound
 	\item There is a limited amount of clock skew between the processes
 \end{itemize}
 \subsection*{b)}
-\subsubsection*{i.}
-Assuming a limited clock skew of \(\delta c\) between the processes, the process \(P_i\) sends a broadcast message \(2 * \delta c + \delta t\) time units after receiving \(i - 1\) messages.
-This allows for instant delivery to a process skewed by the maximum amount of time ''forwards'' while keeping the order of messages intact when sending the message even with the maximum delay \(\delta t\) to a process skewed by the maximum amount of time ''backwards''.
-\subsubsection*{ii.}
-In the worst case, the synchronization protocol takes \(2n (\delta t + \delta c) + 2\delta c\) time units.
-This assumes that all messages take the maximum possible amount of time to deliver, namely \(n delta t\) overall, with clock skew cancelling itself out across all processes.
-Adding the wait-time for each process \(n(\delta t + 2\delta c)\) yields \(2n (\delta t + \delta c)\).
-The final component is assuming the maximum clock skew between \(P_1 \text{ and } P_n\).
+\begin{enumerate}[i.]
+	\item Assuming an upper limit \(s\) of the clock skew between the processes, the process \(P_i\) sends a broadcast message \(2 \cdot s \cdot \delta t + \delta t\) time units after receiving \(i - 1\) messages.
+		The first process sends immediately.
+
+		This allows for instant delivery to a process skewed by the maximum amount of time ''forwards'' while keeping the order of messages intact when sending the message even with the maximum delay \(\delta t\) to a process skewed by the maximum amount of time ''backwards''.
+	\item In the worst case, the synchronization protocol takes \(n \cdot \delta t + (n-1)*(2 \cdot s \cdot \delta t + \delta t)\) time units.
+		The first part \(n \cdot \delta t\) is the maximum possible network delay.
+		The second part \((n-1)*(2 \cdot s \cdot \delta t + \delta t)\) is the waiting time of all processes except the first one that does not have to wait.
+		Clock skew can be ignored here as we do not compare the timestamps of the first send with the last receive.
+\end{enumerate}
+
+\pagebreak
 
 \section*{3 Three-Army-Problem}
 \subsection*{a)}
 To enable a resolution the failure model should exclude both crashing and byzantine failures.
-General Omissions, so long as their occurences are bounded, can be resolved by retrying communication sufficiently often.
+General Omissions, so long as their occurrences are bounded, can be resolved by retrying communication sufficiently often.
+Message delivery also has to have an upper bound on the delay.
 \subsection*{b)}
 \par{Phase 1: Determining order of attack}
 The initiating division sends a messenger with it's own size and the time \(t_0\) to both other divisions.
@@ -84,13 +95,15 @@ A division receiving a first message with a division size sends it's division si
 If it has received two messages, it calculates the order of attack.
 If it is the largest division it initiates Phase 2.
 \par{Phase 2: Attack coordination}
-The largest division is definitively known at \(t_1 = t_0 + r, r \leq 2d\).
+The largest division receives the second message at \(t_1 = t_0 + r, r \leq 2d\).
 The largest division attacks at \(t_1\) and sends a message with that time to both other divisions.
+The new message (and any outstanding messages from the first phase) will arrive before the other divisions need to attack as \(k > d\).
 The second largest division attacks at time \(t_2 = t_1 + k\), the smallest division attacks at \(t_3 = t_1 + 2k = t_2 + k\).
 
 Since all clocks are perfectly synchronized we only need to consider message delivery times.
-\(t_1\) is minimal, because it's the first moment that the largest division is known to be the largest.
+\(t_1\) is minimal, because it's the first moment when the largest division knows it is the largest.
 Since all divisions must have sent their size \emph{before} \(t_1\) -- otherwise the information would not be available -- all divisions know their position in the order of attack at \(t_1 + d < t_1 + k\), which implies that \(t_2 > t_1 + d\) as required to allow the second division to attack at the specified time.
+This holds especially for \(t_3 > t_2\).
 And because all attacks must be at least \(k\) apart, \(2k\) is the minimal span of time between the first and last attack.
 
 \begin{tikzpicture}
@@ -142,6 +155,8 @@ And because all attacks must be at least \(k\) apart, \(2k\) is the minimal span
 	\node at (10, -1.5) {\(t_3\)};
 	
 \end{tikzpicture}
+
+\pagebreak
 
 \section*{4 System Availability}
 
