@@ -2,6 +2,7 @@ package de.unistgt.ipvs.vs.ex2.client;
 
 import de.unistgt.ipvs.vs.ex2.common.ICalculation;
 import de.unistgt.ipvs.vs.ex2.common.ICalculationFactory;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -14,21 +15,54 @@ import java.util.Collection;
  * necessary to complete the assignment. You may also add some fields or methods.
  */
 public class CalcRmiClient {
-	private ICalculation calc = null;
+    private ICalculation calc = null;
 
-	public CalcRmiClient() {
-		this.calc = null;
-	}
+    public CalcRmiClient() {
+        this.calc = null;
+    }
 
-	public int getCalcRes() {
-		return -1;
-	}
+    public int getCalcRes() {
+        try {
+            return calc.getResult();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
-	public boolean init(String url) {
-		return true;
-	}
+    public boolean init(String url) {
+        try {
+            calc = (ICalculation) Naming.lookup(url);
+        } catch (Exception e) {
+            System.out.println("calc is not set, therefore everything will crash");
+            e.printStackTrace();
+        }
+        return true;
+    }
 
-	public boolean calculate(CalculationMode calcMode, Collection<Integer> numbers) {
-		return true;
-	}
+    public boolean calculate(CalculationMode calcMode, Collection<Integer> numbers) {
+        try {
+            switch (calcMode) {
+                case ADD:
+                    for (int n : numbers) {
+                        calc.add(n);
+                    }
+                    break;
+                case MUL:
+                    for (int n : numbers) {
+                        calc.multiply(n);
+                    }
+                    break;
+                case SUB:
+                    for (int n : numbers) {
+                        calc.subtract(n);
+                    }
+                    break;
+            }
+            return true;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
