@@ -14,7 +14,6 @@ public class CalcSocketServer extends Thread {
 
 	public CalcSocketServer(int port) {
 		this.srvSocket = null;
-		
 		this.port = port;
 	}
 	
@@ -29,21 +28,28 @@ public class CalcSocketServer extends Thread {
 
 	@Override
 	public void run() {
-           
 		if (port <= 0) {
 			System.err.println("Wrong number of arguments.\nUsage: SocketServer <listenPort>\n");
 			System.exit(-1);
 		}
 
 		// Start listening server socket ..
+		try {
+			srvSocket = new ServerSocket(port);
+			while(true) {
+				new Thread(new CalculationSession(srvSocket.accept())).start();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-        
-        public void waitUnitlRunnig(){
-            while(this.srvSocket == null){
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException ex) {
-                }
-            }
-        }
+
+	public void waitUnitlRunnig(){
+		while(this.srvSocket == null){
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException ex) {
+			}
+		}
+	}
 }
