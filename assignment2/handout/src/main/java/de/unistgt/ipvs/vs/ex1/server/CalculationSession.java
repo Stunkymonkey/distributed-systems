@@ -28,7 +28,7 @@ public class CalculationSession implements Runnable {
 			ObjectInputStream in = new ObjectInputStream(this.cliSocket.getInputStream());
 
 			// Send RDY when ready
-			oosOut.writeObject("<08:RDY>");
+			out.writeObject("<08:RDY>");
 
 			ICalculation calc = new CalculationImpl();
 			// TOOD
