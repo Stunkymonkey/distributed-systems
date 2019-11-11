@@ -32,7 +32,7 @@
 \addtolength{\headheight}{2\baselineskip}
 \renewcommand{\headrulewidth}{0pt}
 
-\newcommand{\gettitle}{Verteilte Systeme I\\Winter Term 2019/20}
+\newcommand{\gettitle}{Distributed systems I\\Winter Term 2019/20}
 \newcommand{\getsubtitle}{G2T1 – Assignment 2 (theoretical part)}
 \newcommand{\getauthors}{Felix Bühler \and Clemens Lieb \and Steffen Wonner \and Fabian Bühler}
 \setlength{\headheight}{53pt}
@@ -40,7 +40,7 @@
 \begin{document}
 \maketitle
 
-\section*{1 Parameter Passing and RMI}
+\section*{1 - Parameter Passing and RMI}
 \subsection*{a)}
 \begin{enumerate}[label=(\roman*)]
 	\item 
@@ -53,128 +53,240 @@
 \subsection*{c)}
 
 
-\section*{2 Chord System}
+\section*{2 - Chord System}
 \subsection*{a)}
-\begin{table}[!ht]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		1 &  \\ \hline
-		2 &  \\ \hline
-		3 &  \\ \hline
-		4 &  \\ \hline
-		5 &  \\ \hline
-	\end{tabular}
-	\caption{4}
+
+\begin{table}[!htb]
+	\begin{minipage}[t]{.33\linewidth}
+		\centering
+			\begin{tabular}{|l|l|}
+				\hline
+				1 & 11 \\ \hline
+				2 & 11 \\ \hline
+				3 & 11 \\ \hline
+				4 & 16 \\ \hline
+				5 & 23 \\ \hline
+			\end{tabular}
+		\caption{4}
+	\end{minipage}%
+	\hfill%
+	\begin{minipage}[t]{.33\linewidth}
+		\centering
+		\begin{tabular}{|l|l|}
+			\hline
+			1 & 16 \\ \hline
+			2 & 16 \\ \hline
+			3 & 16 \\ \hline
+			4 & 19 \\ \hline
+			5 & 31 \\ \hline
+		\end{tabular}
+		\caption{11}
+	\end{minipage}%
+	\hfill%
+	\begin{minipage}[t]{.33\linewidth}
+		\centering
+		\begin{tabular}{|l|l|}
+			\hline
+			1 & 4 \\ \hline
+			2 & 26 \\ \hline
+			3 & 23 \\ \hline
+			4 & 19 \\ \hline
+			5 & 19 \\ \hline
+		\end{tabular}
+		\caption{16}
+\end{minipage}
 \end{table}
-\begin{table}[!ht]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		1 &  \\ \hline
-		2 &  \\ \hline
-		3 &  \\ \hline
-		4 &  \\ \hline
-		5 &  \\ \hline
-	\end{tabular}
-	\caption{11}
+
+\begin{table}[!htb]
+	\begin{minipage}[t]{.33\linewidth}
+		\centering
+		\begin{tabular}{|l|l|}
+			\hline
+			1 & 23 \\ \hline
+			2 & 23 \\ \hline
+			3 & 23 \\ \hline
+			4 & 31 \\ \hline
+			5 & 4 \\ \hline
+		\end{tabular}
+		\caption{19}
+	\end{minipage}%
+	\hfill%
+	\begin{minipage}[t]{.33\linewidth}
+		\centering
+		\begin{tabular}{|l|l|}
+			\hline
+			1 & 26 \\ \hline
+			2 & 26 \\ \hline
+			3 & 31 \\ \hline
+			4 & 31 \\ \hline
+			5 & 11 \\ \hline
+		\end{tabular}
+		\caption{23}
+	\end{minipage}%
+	\hfill%
+	\begin{minipage}[t]{.33\linewidth}
+		\centering
+		\begin{tabular}{|l|l|}
+			\hline
+			1 & 31 \\ \hline
+			2 & 31 \\ \hline
+			3 & 31 \\ \hline
+			4 & 4 \\ \hline
+			5 & 11 \\ \hline
+		\end{tabular}
+		\caption{26}
+	\end{minipage}
 \end{table}
+
 \begin{table}[!ht]
 	\centering
 	\begin{tabular}{|l|l|}
 		\hline
-		1 &  \\ \hline
-		2 &  \\ \hline
-		3 &  \\ \hline
-		4 &  \\ \hline
-		5 &  \\ \hline
-	\end{tabular}
-	\caption{16}
-\end{table}
-\begin{table}[!ht]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		1 &  \\ \hline
-		2 &  \\ \hline
-		3 &  \\ \hline
-		4 &  \\ \hline
-		5 &  \\ \hline
-	\end{tabular}
-	\caption{19}
-\end{table}
-\begin{table}[!ht]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		1 &  \\ \hline
-		2 &  \\ \hline
-		3 &  \\ \hline
-		4 &  \\ \hline
-		5 &  \\ \hline
-	\end{tabular}
-	\caption{23}
-\end{table}
-\begin{table}[!ht]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		1 &  \\ \hline
-		2 &  \\ \hline
-		3 &  \\ \hline
-		4 &  \\ \hline
-		5 &  \\ \hline
-	\end{tabular}
-	\caption{26}
-\end{table}
-\begin{table}[!ht]
-	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		1 &  \\ \hline
-		2 &  \\ \hline
-		3 &  \\ \hline
-		4 &  \\ \hline
-		5 &  \\ \hline
+		1 & 4 \\ \hline
+		2 & 4 \\ \hline
+		3 & 4 \\ \hline
+		4 & 11 \\ \hline
+		5 & 16 \\ \hline
 	\end{tabular}
 	\caption{31}
 \end{table}
 \subsection*{b)}
+\begin{enumerate}
+	\item node 4 $ \rightarrow $ node 16
+	\item node 16 $ \rightarrow $ node 19
+	\item node 19 $ \rightarrow $ node 23
+\end{enumerate}
 \subsection*{c)}
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		1 & 26 \\ \hline
+		2 & 26 \\ \hline
+		3 & 31 \\ \hline
+		4 & 4 \\ \hline
+		5 & 11 \\ \hline
+	\end{tabular}
+	\caption{24}
+\end{table}
+The finger tables of Node 11, 16, 19 and 23 should be recomputed.\\
+The changes only occur in Node 16 and 23.
 \subsection*{d)}
+Looking at the node 23, there has to be an update on the fifth entry on the finger table. When Node 7 and 9 are joining at the exact same time the fifth entry on the finger table of node 23 can become invalid. Same applies for Node 31 in the fourth entry.
 \subsection*{e)}
 \subsection*{f)}
 
 
-\section*{3 Name Services}
+\section*{3 - Name Services}
 \subsection*{a)}
 \begin{table}[!ht]
 	\centering
-	\begin{tabular}{|l|l|l|}
+	\begin{tabular}{|c|c|c|}
 		\hline
 		& Iterative resolution & Recursive resolution \\ \hline
-		1. Lookup &  &  \\ \hline
-		2. Lookup &  &  \\ \hline
-		3. Lookup &  &  \\ \hline
+		1. Lookup & 5 & 5 \\ \hline
+		2. Lookup & 5 & 5 \\ \hline
+		3. Lookup & 5 & 5 \\ \hline
 	\end{tabular}
 \end{table}
 \subsection*{b)}
 \begin{table}[!ht]
 	\centering
-	\begin{tabular}{|l|l|l|}
+	\begin{tabular}{|c|c|c|}
 		\hline
 		& Iterative resolution & Recursive resolution \\ \hline
-		1. Lookup &  &  \\ \hline
-		2. Lookup &  &  \\ \hline
-		3. Lookup &  &  \\ \hline
+		1. Lookup & 5 & 5 \\ \hline
+		2. Lookup & 5 & 4 \\ \hline
+		3. Lookup & 5 & 5 \\ \hline
 	\end{tabular}
 \end{table}
 \subsection*{c)}
 
-\begin{enumerate}[label=(\roman*)]
-	\item 
-	\item 
-	\item 
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+\subsubsection*{i.}
+\begin{lstlisting}
+$ dig NS uni-stuttgart.de
+...
+;; ANSWER SECTION:
+uni-stuttgart.de.	2191	IN	NS	minnehaha.rhrk.uni-kl.de.
+uni-stuttgart.de.	2191	IN	NS	dns3.belwue.de.
+uni-stuttgart.de.	2191	IN	NS	dns1.belwue.de.
+uni-stuttgart.de.	2191	IN	NS	dns0.uni-stuttgart.de.
+uni-stuttgart.de.	2191	IN	NS	dns1.uni-stuttgart.edu.
+...
+\end{lstlisting}
+There are 5 server responsible for the DNS entry of 'uni-stuttgart.de':
+\begin{itemize}
+	\item minnehaha.rhrk.uni-kl.de
+	\item dns3.belwue.de
+	\item dns1.belwue.de
+	\item dns0.uni-stuttgart.de
+	\item dns1.uni-stuttgart.edu
+\end{itemize}
+\subsubsection*{ii.}
+\begin{lstlisting}
+$ dig -x 129.69.216.249
+...
+;; ANSWER SECTION:
+249.216.69.129.in-addr.arpa. 86397 IN	PTR	ipvslogin.informatik.uni-stuttgart.de.
+...
+\end{lstlisting}
+PTR is usefull for resolving an IP address to a domain or hostname (reverse DNS lookup).\\
+The given IP resolves to: 'ipvslogin.informatik.uni-stuttgart.de'
+\subsubsection*{iii.}
+\begin{lstlisting}
+$ dig +trace www.uni-stuttgart.de
+...
+.			347153	IN	NS	h.root-servers.net.
+.			347153	IN	NS	l.root-servers.net.
+.			347153	IN	NS	d.root-servers.net.
+.			347153	IN	NS	m.root-servers.net.
+.			347153	IN	NS	e.root-servers.net.
+.			347153	IN	NS	k.root-servers.net.
+.			347153	IN	NS	i.root-servers.net.
+.			347153	IN	NS	b.root-servers.net.
+.			347153	IN	NS	c.root-servers.net.
+.			347153	IN	NS	a.root-servers.net.
+.			347153	IN	NS	f.root-servers.net.
+.			347153	IN	NS	g.root-servers.net.
+.			347153	IN	NS	j.root-servers.net.
+...
+;; Received 553 bytes from 192.168.0.1#53(192.168.0.1) in 28 ms
+
+de.			172800	IN	NS	z.nic.de.
+de.			172800	IN	NS	f.nic.de.
+de.			172800	IN	NS	s.de.net.
+de.			172800	IN	NS	a.nic.de.
+de.			172800	IN	NS	l.de.net.
+de.			172800	IN	NS	n.de.net.
+...
+;; Received 802 bytes from 2001:500:12::d0d#53(g.root-servers.net) in 22 ms
+
+uni-stuttgart.de.	86400	IN	NS	dns0.uni-stuttgart.de.
+uni-stuttgart.de.	86400	IN	NS	dns1.belwue.de.
+uni-stuttgart.de.	86400	IN	NS	dns1.uni-stuttgart.edu.
+uni-stuttgart.de.	86400	IN	NS	dns3.belwue.de.
+uni-stuttgart.de.	86400	IN	NS	minnehaha.rhrk.uni-kl.de.
+...
+;; Received 619 bytes from 2001:67c:1011:1::53#53(n.de.net) in 25 ms
+
+www.uni-stuttgart.de.	3600	IN	A	129.69.8.19
+...
+uni-stuttgart.de.	3600	IN	NS	dns0.uni-stuttgart.de.
+uni-stuttgart.de.	3600	IN	NS	minnehaha.rhrk.uni-kl.de.
+uni-stuttgart.de.	3600	IN	NS	dns1.uni-stuttgart.edu.
+uni-stuttgart.de.	3600	IN	NS	dns3.belwue.de.
+uni-stuttgart.de.	3600	IN	NS	dns1.belwue.de.
+...
+;; Received 1365 bytes from 129.143.2.10#53(dns1.belwue.de) in 25 ms
+
+\end{lstlisting}
+The path the lookup took was:
+\begin{enumerate}
+	\item 192.168.0.1
+	\item g.root-servers.net
+	\item n.de.net
+	\item dns1.belwue.de
 \end{enumerate}
 
 \end{document}
