@@ -2,7 +2,7 @@ package de.unistgt.ipvs.vs.ex1;
 
 import de.unistgt.ipvs.vs.ex1.client.CalcSocketClient;
 import de.unistgt.ipvs.vs.ex1.server.CalcSocketServer;
-import java.io.IOException;
+
 import static org.junit.Assert.*;
 import org.junit.Rule;
 
@@ -24,7 +24,7 @@ public class TestCalc {
         // Start Server
         CalcSocketServer cSrv = new CalcSocketServer(srvPort);
         cSrv.start();
-        cSrv.waitUnitlRunnig();
+        cSrv.waitUntilRunning();
 
         CalcSocketClient cCli = new CalcSocketClient();
         cCli.connectTo(srvIP, srvPort);
@@ -49,7 +49,7 @@ public class TestCalc {
         // Start Server
         CalcSocketServer cSrv = new CalcSocketServer(srvPort);
         cSrv.start();
-        cSrv.waitUnitlRunnig();
+        cSrv.waitUntilRunning();
 
         CalcSocketClient cCli = new CalcSocketClient();
         cCli.connectTo(srvIP, srvPort);
@@ -73,7 +73,7 @@ public class TestCalc {
         // Start Server
         CalcSocketServer cSrv = new CalcSocketServer(srvPort);
         cSrv.start();
-        cSrv.waitUnitlRunnig();
+        cSrv.waitUntilRunning();
 
         CalcSocketClient cCli = new CalcSocketClient();
         cCli.connectTo(srvIP, srvPort);
@@ -91,6 +91,5 @@ public class TestCalc {
         
         cCli.disconnect();
     }
-        
 
 }

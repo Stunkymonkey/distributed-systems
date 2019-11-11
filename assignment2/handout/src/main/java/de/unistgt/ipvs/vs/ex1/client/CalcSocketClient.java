@@ -1,5 +1,7 @@
 package de.unistgt.ipvs.vs.ex1.client;
 
+import de.unistgt.ipvs.vs.ex1.common.MessageReader;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -13,8 +15,8 @@ public class CalcSocketClient {
 	private int    rcvdErs;		// --> Number of invalid message contents
 	private int    calcRes;		// --> Calculation result (cf.  'RES')
 
-	ObjectOutputStream out;
-	ObjectInputStream in;
+	private OutputStream out;
+	private MessageReader in;
 	
 	public CalcSocketClient() {
 		this.cliSocket = null;
@@ -40,11 +42,11 @@ public class CalcSocketClient {
 		//Solution here
 		try {
 			cliSocket = new Socket(srvIP, srvPort);
-			out = new ObjectOutputStream(cliSocket.getOutputStream());
-			in = new ObjectInputStream(cliSocket.getInputStream());
+			out = cliSocket.getOutputStream();
+			in = new MessageReader(cliSocket.getInputStream());
 
 			// check if RDY was sent, else exit
-			String rdyMsg = (String) in.readObject();
+			String rdyMsg = in.next();
 			if(!rdyMsg.equals("<08:RDY>")) {
 				System.err.println("The server did not send the RDY message.");
 				return false;
@@ -72,8 +74,37 @@ public class CalcSocketClient {
 			System.err.println("Client not connected!");
 			return false;
 		}
-		//Solution here
-		// TODO
+		try {
+			// send the request to the server
+			out.write(request.getBytes());
+			// get the responses and handle them
+			outer: while (true) {
+				String response = in.next();
+				String[] contents = in.contents(response.toUpperCase());
+				for (int i = 0; i < contents.length; i++) {
+					String responsePart = contents[i];
+					switch (responsePart) {
+						case "OK":
+							rcvdOKs++;
+							break;
+						case "ERR":
+							rcvdErs++;
+							break;
+						case "RES":
+							// automatically advance loop counter to skip result for the loop
+							calcRes = Integer.parseInt(contents[++i]);
+							break;
+						case "FIN":
+							//message has been handled, return control flow to caller
+							break outer;
+					}
+				}
+			}
+		} catch (IOException e) {
+			System.err.println("Failed to calculate request with an exception");
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 }

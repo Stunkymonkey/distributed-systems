@@ -13,6 +13,7 @@ public class CalcSocketServer extends Thread {
 	private int port;
 
 	public CalcSocketServer(int port) {
+		super("Calculation Server Accept Thread");
 		this.srvSocket = null;
 		this.port = port;
 	}
@@ -37,6 +38,7 @@ public class CalcSocketServer extends Thread {
 		try {
 			srvSocket = new ServerSocket(port);
 			while(true) {
+				// spawn a new session for each client that connects
 				new Thread(new CalculationSession(srvSocket.accept())).start();
 			}
 		} catch (IOException e) {
@@ -44,7 +46,7 @@ public class CalcSocketServer extends Thread {
 		}
 	}
 
-	public void waitUnitlRunnig(){
+	public void waitUntilRunning(){
 		while(this.srvSocket == null){
 			try {
 				Thread.sleep(1);
