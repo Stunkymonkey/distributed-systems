@@ -43,17 +43,42 @@
 \section*{1 - Parameter Passing and RMI}
 \subsection*{a)}
 \begin{enumerate}[label=(\roman*)]
-	\item [1, 2, 3, 4, 5]
-	\item [5, 4, 2, 4, 5]
-	\item [1, 2, 3, 4, 5] or [5, 4, 3, 2, 1] depending on the order in which the arrays are copied back.
+	% no return value, so a is never changed
+	\item \texttt{[1, 2, 3, 4, 5]}
+	% the code given does not perform a swap, it only overwrites the lower indices with values from the upper ones.
+	% because of reference semantics that overwrites the second input as well
+	\item \texttt{[5, 4, 3, 4, 5]}
+	\item \texttt{[5, 4, 3, 2, 1]} \emph{or} \texttt{[1, 2, 3, 4, 5]} \emph{or} \texttt{[5, 4, 3, 4, 5]}, depending on the exact semantic behaviour of the copy and restore operations.
+	Given that the remote server passes the arguments by reference, the first question is whether \textit{x} and \textit{y} have separate copies of \textit{a}. 
+	If they do, the first or second option is possible. 
+	If there are no separate copies of \textit{a}, the procedure behaves as if the parameters were passed by reference. 
+	Otherwise it depends on which value is restored first.
 \end{enumerate}
 
 \subsection*{b)}
-All objects that extend UnicastRemoteObject are send as reference, all other objects are send as value.
-In the frist and last two lines the parameter is a StringBuffer object wich does not implement UnicastRemoteObject and send as value. In the third line the parameter is a StringServer object wich does implement UnicastRemoteObject and because of this is send as reference.
+
+The result printed to the system console is:
+\begin{verbatim}
+$ java StringServer
+1: B
+2: BRS
+3: ABSBRS
+\end{verbatim}
+
+We can deduce that all objects that extend UnicastRemoteObject are sent as reference, all other objects are sent as value.
+In the first and last two lines the parameter is a StringBuffer object which does not implement UnicastRemoteObject and is therefore sent as value. 
+In the third line the parameter is a StringServer object which does implement UnicastRemoteObject and because of this is sent as reference.
+
 \subsection*{c)}
-Call-by-Value has a huge overhead if a large structure is given of wich only a small part is writen/read.
-Call-by-reference has a huge overhead if it is often writen/read.
+
+The first line shows that even "complex java objects" are passed by value so long as they are not remote objects. 
+This implies that even very large non-remote objects would be serialized and passed by value (e.g. Arrays with hundreds of thousands of elements).
+Such a behaviour incurs large overheads, especially if only parts of the passed value are accessed by the remote procedure.
+
+The lines two and three demonstrate the reference-passing behaviour within java's RMI implementation. 
+Notably, remote objects are passed by reference. 
+Calls to the passed remote objects are routed back to the JVM the actual object resides in. 
+This can lead to large overheads if a lot of calls are made to the referenced object.
 
 \section*{2 - Chord System}
 \subsection*{a)}
