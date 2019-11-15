@@ -10,6 +10,8 @@
 \usepackage{xparse}
 \usepackage{fancyhdr}
 \usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 \usepackage{parskip}
 \usepackage[table]{xcolor}
 \usepackage{tabularx}
@@ -177,7 +179,6 @@ This can lead to large overheads if a lot of calls are made to the referenced ob
 	\item node 19 $ \rightarrow $ node 23
 \end{enumerate}
 
-
 \subsection*{c)}
 \begin{minipage}[t]{.25\linewidth}
 	\centering
@@ -194,18 +195,30 @@ This can lead to large overheads if a lot of calls are made to the referenced ob
 
 The finger table of node 16 will change eventually while the one for node 23 will change immediately.
 
-
 \subsection*{d)}
-If both nodes join simultaneously they are between the same two nodes (4 and 11). If they now try to each update their predecessor and successor then we have a race condition while updating a linked list. This can leave the list (or in this case ring) in an inconsistent state that makes routing impossible!
-
+If both nodes join simultaneously they are between the same two nodes (4 and 11). 
+If they now try to each update their predecessor and successor then we have a race condition while updating a linked list. 
+This can leave the list (or in this case ring) in an inconsistent state that makes routing impossible!
 
 \subsection*{e)}
+
+This code updates the FT entries of \textit{p} for the former successor's predecessor which has the id \textit{q}.
+
+\begin{algorithm}
+\begin{algorithmic}
+	\For{$i \gets 0 \textbf{ to } \lfloor log_2(q - p) \rfloor$}
+	   \State $FT_p[i] \gets q$
+	\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+This code assumes that only \textit{q} has been inserted between \textit{p} and the former successor.
+The obvious issue arising from that (namely that multiple insertions are not correctly handled), can be easily remedied by repeating the consistency check after updating the finger table.
+As presented the code is already eventually consistent, though.
+
 \subsection*{f)}
 
-
-
 \section*{3 - Name Services}
-
 
 \subsection*{a)}
 \begin{center}
@@ -218,7 +231,6 @@ If both nodes join simultaneously they are between the same two nodes (4 and 11)
 	\end{tabular}
 \end{center}
 
-
 \subsection*{b)}
 \begin{center}
 	\begin{tabular}{|c|c|c|}
@@ -229,7 +241,6 @@ If both nodes join simultaneously they are between the same two nodes (4 and 11)
 		3. Lookup & 8 & 8 (6 fast, 2 slow) \\ \hline
 	\end{tabular}
 \end{center}
-
 
 \subsection*{c)}
 
