@@ -50,11 +50,9 @@
 	% the code given does not perform a swap, it only overwrites the lower indices with values from the upper ones.
 	% because of reference semantics that overwrites the second input as well
 	\item \texttt{[5, 4, 3, 4, 5]}
-	\item \texttt{[5, 4, 3, 2, 1]} \emph{or} \texttt{[1, 2, 3, 4, 5]} \emph{or} \texttt{[5, 4, 3, 4, 5]}, depending on the exact semantic behaviour of the copy and restore operations.
-	Given that the remote server passes the arguments by reference, the first question is whether \textit{x} and \textit{y} have separate copies of \textit{a}. 
-	If they do, the first or second option is possible. 
-	If there are no separate copies of \textit{a}, the procedure behaves as if the parameters were passed by reference. 
-	Otherwise it depends on which value is restored first.
+	\item \texttt{[5, 4, 3, 2, 1]} \emph{or} \texttt{[1, 2, 3, 4, 5]} depending on the order of restore operations.
+	The first option appears when \textit{y} is restored before \textit{x}.
+	The second option appears when the restoration order is reversed.
 \end{enumerate}
 
 \subsection*{b)}
