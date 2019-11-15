@@ -43,15 +43,17 @@
 \section*{1 - Parameter Passing and RMI}
 \subsection*{a)}
 \begin{enumerate}[label=(\roman*)]
-	\item 
-	\item 
-	\item 
+	\item [1, 2, 3, 4, 5]
+	\item [5, 4, 2, 4, 5]
+	\item [1, 2, 3, 4, 5] or [5, 4, 3, 2, 1] depending on the order in which the arrays are copied back.
 \end{enumerate}
 
 \subsection*{b)}
-
+All objects that extend UnicastRemoteObject are send as reference, all other objects are send as value.
+In the frist and last two lines the parameter is a StringBuffer object wich does not implement UnicastRemoteObject and send as value. In the third line the parameter is a StringServer object wich does implement UnicastRemoteObject and because of this is send as reference.
 \subsection*{c)}
-
+Call-by-Value has a huge overhead if a large structure is given of wich only a small part is writen/read.
+Call-by-reference has a huge overhead if it is often writen/read.
 
 \section*{2 - Chord System}
 \subsection*{a)}
