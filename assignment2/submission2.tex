@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
 \usepackage[a4paper, left=2.5cm, right=2.5cm, top=2.5cm, bottom=4cm]{geometry}
-\usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 \usepackage{amsmath, amsthm, amssymb, amstext}
 \usepackage{listings}
 \usepackage{color}
@@ -217,13 +217,14 @@ As presented the code is already eventually consistent, though.
 \subsection*{f)}
 
 As outlined in the forum, it's assumed that the node ids within the system are at least vaguely evenly distributed under the given hash function.
-Given that assumption and the assumption that there are at least three nodes in the system, it's reasonable to assume that no node is responsible for an adress space larger than \(2^m-1\).
-Carrying that assumption onwards, any entity will be stored on two nodes, because the smallest \(p \leq ID_1(e)\) will resolve to different nodes in the separate chord rings.
+Given that assumption and the assumption that there are at least three nodes in the system, it's reasonable to assume that no node is responsible for an address space larger than \(2^m-1\).
+As \(2^m-1\) is also the offset between the two hash ids it is obvious that between the two ids must be at least one node.
+And if a node is between the two ids different nodes must be responsible for the ids.
 
 This property holds true under the assumption that no node is responsible for an adress space larger than the largest lookup shortcut, which is the offset for the second chord ring.
 If that property is not given, the insert is not guaranteed to store an entity's copy on two different nodes.
 That failure can be seen when considering \(ID_1(n_1) + 2 = ID_1(n_2) + 1 = ID_1(n_3)\) for three nodes \(\{n_1, n_2, n_3\}\).
-It's likely that an inserted entity on a chord-ring structure with 8 entries will be inserted into \(n_3\), violating the preferred property.
+It's likely that an inserted entity on a chord-ring structure with 8 entries will be inserted into \(n_1\), violating the preferred property.
 
 \section*{3 - Name Services}
 
