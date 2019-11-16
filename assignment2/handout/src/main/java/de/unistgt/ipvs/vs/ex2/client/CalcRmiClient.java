@@ -3,9 +3,7 @@ package de.unistgt.ipvs.vs.ex2.client;
 import de.unistgt.ipvs.vs.ex2.common.ICalculation;
 import de.unistgt.ipvs.vs.ex2.common.ICalculationFactory;
 
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Collection;
 
@@ -32,10 +30,11 @@ public class CalcRmiClient {
 
     public boolean init(String url) {
         try {
-            calc = (ICalculation) Naming.lookup(url);
+            calc = ((ICalculationFactory) Naming.lookup(url)).getSession();
         } catch (Exception e) {
             System.out.println("calc is not set, therefore everything will crash");
             e.printStackTrace();
+            return false;
         }
         return true;
     }

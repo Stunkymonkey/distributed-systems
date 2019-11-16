@@ -2,7 +2,6 @@ package de.unistgt.ipvs.vs.ex1.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * Extend the run-method of this class as necessary to complete the assignment.

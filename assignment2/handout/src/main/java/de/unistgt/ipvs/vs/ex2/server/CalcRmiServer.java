@@ -1,13 +1,11 @@
 package de.unistgt.ipvs.vs.ex2.server;
 
-import de.unistgt.ipvs.vs.ex2.common.ICalculation;
 import de.unistgt.ipvs.vs.ex2.common.ICalculationFactory;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
-import java.rmi.registry.LocateRegistry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +21,8 @@ public class CalcRmiServer extends Thread {
     public CalcRmiServer(String regHost, String objName) {
         this.regHost = regHost;
         this.objName = objName;
-        this.url = "rmi://" + regHost + "/" + objName;
+        // do not specify scheme, because the unit-tests don't specify it either.
+        this.url = "//" + regHost + "/" + objName;
     }
 
     @Override
@@ -32,15 +31,9 @@ public class CalcRmiServer extends Thread {
             System.err.println("<registryHost> or <objectName> not set!");
             return;
         }
-        //Add solution here
         try {
-            LocateRegistry.getRegistry();
-        } catch (RemoteException e) {
-            // should not happen, otherwise port is already used
-        }
-        try {
-            ICalculation srv = new CalculationImpl();
-            Naming.rebind(this.url, srv);
+            ICalculationFactory srv = new CalculationImplFactory();
+            Naming.bind(url, srv);
             System.out.println("Server binding successful");
         } catch (Exception e) {
             e.printStackTrace();
