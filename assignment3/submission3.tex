@@ -67,6 +67,7 @@
 	(b5.north) edge (a10.south)
 	(a11.south) edge (b8.north);
 \end{tikzpicture}
+\caption{Solution for Figure 1}
 \end{figure}
 \begin{align*}
 O = \frac12((t_2 - t_1) - (t_4 - t_3)) = \frac12((10 - 5) - (8 - 11)) = \frac12(5 + 3) = 4  &\\
@@ -74,6 +75,39 @@ d = 1 & \\
 \Delta = 12, C_s(t_4 + \Delta) = 20 & \\
 \frac{dC_S}{dt} = \frac{12 + 4}{12} = \frac{4}{3} &
 \end{align*}
+
+
+\begin{figure}[ht!]
+	\begin{tikzpicture}[scale=0.15]
+	\foreach \x in {1,...,97} {
+		\draw (\x,0) -- (\x, 2);
+		\draw (\x, -5) -- (\x, -7);
+	};
+	\draw (0,0) -- (97,0);
+	\draw (0,-5) -- (97,-5);
+	\node at(0, -1) {\tiny Master};
+	\node at(0, -4) {\tiny Slave};
+	\foreach \x/\n in {3/1,9/2,15/3,21/4,27/5,33/6,39/7,45/8,51/9,57/10,63/11,69/12,75/13,81/14,87/15,93/16} {
+		\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,1) (a\n) {}
+			node[below=7mm, above of=a\n] {\tiny \n};
+	};
+	\foreach \x/\n in {3/6,9/7,15/8,21/9,27/10,33/11,49/12,65/13,81/14,87/15,93/16} {
+		\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,-6) (b\n) {}
+			node[above=7mm, below of=b\n] {\tiny \n};
+	};
+	\path[draw,->]
+		(b8.north) edge (a4.south)
+		(a5.south) edge (b11.north);
+\end{tikzpicture}
+\caption{Solution for Figure 2}
+\end{figure}
+\begin{align*}
+O = \frac12((t_2 - t_1) - (t_4 - t_3)) = \frac12((4 - 8) - (11 - 5)) = \frac12(-4 - 6) = -5  &\\
+d = 1 & \\
+\Delta = 3, C_s(t_4 + \Delta) = 14 & \\
+\frac{dC_S}{dt} = \frac{3}{3 +5} = \frac{3}{8} &
+\end{align*}
+	
 
 \subsection*{b)}
 
