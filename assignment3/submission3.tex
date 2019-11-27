@@ -45,10 +45,39 @@
 \section*{1 - Physical Clocks}
 \subsection*{a)}
 
+\begin{figure}[ht!]
+\begin{tikzpicture}[scale=0.15]
+\foreach \x in {1,...,97} {
+	\draw (\x,0) -- (\x, 2);
+	\draw (\x, -5) -- (\x, -7);
+};
+\draw (0,0) -- (97,0);
+\draw (0,-5) -- (97,-5);
+\node at(0, -1) {\tiny Master};
+\node at(0, -4) {\tiny Slave};
+\foreach \x/\n in {3/7,9/8,15/9,21/10,27/11,33/12,39/13,45/14,51/15,57/16,63/17,69/18,75/19,81/20,87/21,93/22} {
+	\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,1) (a\n) {}
+		node[below=7mm, above of=a\n] {\tiny \n};
+};
+\foreach \x/\n in {3/3,9/4,15/5,21/6,27/7,33/8,37/9,41/10,45/11,49/12,53/13,57/14,61/15,65/16,69/17,73/18,77/19,81/20,87/21,93/22} {
+	\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,-6) (b\n) {}
+		node[above=7mm, below of=b\n] {\tiny \n};
+};
+\path[draw,->] 
+	(b5.north) edge (a10.south)
+	(a11.south) edge (b8.north);
+\end{tikzpicture}
+\end{figure}
+\begin{align*}
+O = \frac12((t_2 - t_1) - (t_4 - t_3)) = \frac12((10 - 5) - (8 - 11)) = \frac12(5 + 3) = 4  &\\
+d = 1 & \\
+\Delta = 12, C_s(t_4 + \Delta) = 20 & \\
+\frac{dC_S}{dt} = \frac{12 + 4}{12} = \frac{4}{3} &
+\end{align*}
+
 \subsection*{b)}
 
 \section*{2 - Logical Clocks}
-\subsection*{a)}
 \subsection*{a)}
 \begin{enumerate}[label=(\roman*)]
 	\item 
@@ -98,6 +127,7 @@
 	Send event: e$_6$ e$_4$ e$_{10}$ e$_{12}$\\
 	Recieve event:  e$_8$ e$_{13}$ e$_7$ e$_2$\\
 \end{enumerate}
+
 \section*{3 - Global State}
 \subsection*{a)}
 $ \{(e^{1}_{1}, e^{1}_{2}), (e^{2}_{1}, e^{2}_{2}), (e^{2}_{2}, e^{3}_{1}), (e^{4}_{1}, e^{3}_{2}), (e^{4}_{1}, e^{4}_{2}), (e^{5}_{1}, e^{5}_{2}), (e^{1}_{1}, e^{2}_{2}), (e^{2}_{2}, e^{4}_{1}), (e^{4}_{1}, e^{5}_{2})\} $
