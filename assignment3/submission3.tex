@@ -250,6 +250,81 @@ $ \{(e^{1}_{1}, e^{1}_{2}), (e^{2}_{1}, e^{2}_{2}), (e^{2}_{2}, e^{3}_{1}), (e^{
 \section*{4 - Snapshot Algorithm}
 \subsection*{a)}
 
+See Figure 4
+
+\begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[auto,node distance=1.5cm,event/.style={fill=black,circle, inner sep=0pt, minimum size=5pt},state/.style={draw,rectangle, red, color=red, inner sep=0pt, minimum size=5pt, minimum width=10pt}, msg/.style={-latex,thick}, marker/.style={-latex,thick,red}]
+        \node[] (p1s) {\(P_1\)};
+        \node[] (p2s) [below = of p1s] {\(P_2\)};
+        \node[] (p3s) [below = of p2s] {\(P_3\)};
+        
+        \node[] (p1e) [right = 13cm of p1s] {};
+        \node[] (p2e) [right = 13cm of p2s] {};
+        \node[] (p3e) [right = 13cm of p3s] {};
+        
+        \path (p1s.east) edge (p1e);
+        \path (p2s.east) edge (p2e);
+        \path (p3s.east) edge (p3e);
+        
+        \node[event,label={\(e_1^1\)}] (e11) [right = 1.3cm of p1s] {};
+        \node[event,label={\(e_2^1\)}] (e21) [right = 1cm of p2s] {};
+        \node[event,label={\(e_3^1\)}] (e31) [right = 2cm of p3s] {};
+        
+        
+        \node[event,label={\(e_1^2\)}] (e12) [right = 4.2cm of p1s] {};
+        \node[event,label={\(e_2^2\)}] (e22) [right = 2.1cm of p2s] {};
+        \node[event,label={\(e_3^2\)}] (e32) [right = 4cm of p3s] {};
+        
+        
+        \node[event,label={\(e_1^3\)}] (e13) [right = 6cm of p1s] {};
+        \node[event,label={\(e_2^3\)}] (e23) [right = 4.5cm of p2s] {};
+        \node[event,label={\(e_3^3\)}] (e33) [right = 10cm of p3s] {};
+        
+        
+        \node[event,label={\(e_1^4\)}] (e14) [right = 7cm of p1s] {};
+        \node[event,label=below:{\(e_2^4\)}] (e24) [right = 8.5cm of p2s] {};
+        
+        
+        \node[event,label={\(e_1^5\)}] (e15) [right = 10.5cm of p1s] {};
+        \node[event,label={\(e_2^5\)}] (e25) [right = 9cm of p2s] {};
+        
+        \node[event,label={\(e_2^6\)}] (e26) [right = 12.5cm of p2s] {};
+        
+        \path (e21) edge[msg] node {\(m_1\)} (e31);
+        \path (e11) edge[msg] node[left] {\(m_2\)} (e23);
+        \path (e22) edge[msg] node[right] {\(m_3\)} (e12);
+        \path (e32) edge[msg] node[below right] {\(m_4\)} (e14);
+        \path (e13) edge[msg] node[right] {\(m_5\)} (e25);
+        \path (e15) edge[msg] node {\(m_6\)} (e26);
+        \path (e24) edge[msg] node {\(m_7\)} (e33);
+        
+        \node[state,label={[red]:{\(s_3\)}}] (s3) [right = 3cm of p3s] {};
+        \node[state,label={[red]:{\(s_1,c_4\)}}] (s1) [right = 5cm of p1s] {};
+        \node[state,label={[red]below:{\(s_2,c_1\)}}] (s2) [right = 6.5cm of p2s] {};
+        
+        \node[state,label={[red]:{\(c_2\)}}] (c2) [right = 8cm of p1s] {};
+        \node[state,label={[red]:{\(c_3\)}}] (c3) [right = 8.5cm of p3s] {};
+        
+        \path (s3.north east) edge[marker] node[below] {\(M\)} (s1.south west);
+        \path (s1.south east) edge[marker] node[left] {\(M'\)} (s2.north west);
+        \path (s2.north east) edge[marker] node[below left] {\(M''\)} (c2.south west);
+        \path (s2.south east) edge[marker] node[] {\(M''\)} (c3.north west);
+    \end{tikzpicture}
+    
+    The red boxes represent where a process saves some state. A process state save is denoted by \(s_i\) and a channel state save by \(c_j\) where \(i\) is the process number and \(j\) is the channel number.
+    \caption{solution for 4.a)}
+\end{figure}
+
 \subsection*{b)}
+
+No channel received a message between the process starting recording and the first/second marker arriving. All channel states are empty sets.
+
+\begin{align*}
+    c_1 &= \{\}\\
+    c_2 &= \{\}\\
+    c_3 &= \{\}\\
+    c_4 &= \{\}\\
+\end{align*}
 
 \end{document}
