@@ -46,21 +46,21 @@
 \subsection*{a)}
 
 \begin{figure}[ht!]
-\begin{tikzpicture}[scale=0.15]
-\foreach \x in {1,...,97} {
+\begin{tikzpicture}[scale=0.2]
+\foreach \x in {1,...,81} {
 	\draw (\x,0) -- (\x, 2);
 	\draw (\x, -5) -- (\x, -7);
 };
-\draw (0,0) -- (97,0);
-\draw (0,-5) -- (97,-5);
+\draw (0,0) -- (81,0);
+\draw (0,-5) -- (81,-5);
 \node at(0, -1) {\tiny Master};
 \node at(0, -4) {\tiny Slave};
-\foreach \x/\n in {3/7,9/8,15/9,21/10,27/11,33/12,39/13,45/14,51/15,57/16,63/17,69/18,75/19,81/20,87/21,93/22} {
-	\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,1) (a\n) {}
+\foreach \x/\n in {3/7,8/8,13/9,18/10,23/11,28/12,33/13,38/14,43/15,48/16,53/17,58/18,63/19,68/20,73/21,78/22} {
+	\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=4mm] at(\x,1) (a\n) {}
 		node[below=7mm, above of=a\n] {\tiny \n};
 };
-\foreach \x/\n in {3/3,9/4,15/5,21/6,27/7,33/8,37/9,41/10,45/11,49/12,53/13,57/14,61/15,65/16,69/17,73/18,77/19,81/20,87/21,93/22} {
-	\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,-6) (b\n) {}
+\foreach \x/\n in {3/3,8/4,13/5,18/6,23/7,28/8,31/9,34/10,37/11,40/12,43/13,46/14,49/15,52/16,55/17,58/18,63/19,68/20,73/21,78/22} {
+	\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=4mm] at(\x,-6) (b\n) {}
 		node[above=7mm, below of=b\n] {\tiny \n};
 };
 \path[draw,->] 
@@ -70,29 +70,28 @@
 \caption{Solution for Figure 1}
 \end{figure}
 \begin{align*}
-O = \frac12((t_2 - t_1) - (t_4 - t_3)) = \frac12((10 - 5) - (8 - 11)) = \frac12(5 + 3) = 4  &\\
+O = \frac12((t_2 - t_1) - (t_4 - t_3)) = \frac12((10 - 5) - (8 - 11)) = \frac12(5 + 3) = 4 &\\
 d = 1 & \\
-\Delta = 12, C_s(t_4 + \Delta) = 20 & \\
-\frac{dC_S}{dt} = \frac{12 + 4}{12} = \frac{4}{3} &
+\Delta = 6, C_s(t_4 + \Delta) = 18 & \\
+\frac{dC_S}{dt} = \frac{6 + 4}{6} = \frac{5}{3} &
 \end{align*}
 
-
 \begin{figure}[ht!]
-	\begin{tikzpicture}[scale=0.15]
-	\foreach \x in {1,...,97} {
+	\begin{tikzpicture}[scale=0.2]
+	\foreach \x in {1,...,81} {
 		\draw (\x,0) -- (\x, 2);
 		\draw (\x, -5) -- (\x, -7);
 	};
-	\draw (0,0) -- (97,0);
-	\draw (0,-5) -- (97,-5);
+	\draw (0,0) -- (81,0);
+	\draw (0,-5) -- (81,-5);
 	\node at(0, -1) {\tiny Master};
 	\node at(0, -4) {\tiny Slave};
-	\foreach \x/\n in {3/1,9/2,15/3,21/4,27/5,33/6,39/7,45/8,51/9,57/10,63/11,69/12,75/13,81/14,87/15,93/16} {
-		\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,1) (a\n) {}
+	\foreach \x/\n in {3/1,8/2,13/3,18/4,23/5,28/6,33/7,38/8,43/9,48/10,53/11,58/12,63/13,68/14,73/15,78/16} {
+		\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=4mm] at(\x,1) (a\n) {}
 			node[below=7mm, above of=a\n] {\tiny \n};
 	};
-	\foreach \x/\n in {3/6,9/7,15/8,21/9,27/10,33/11,49/12,65/13,81/14,87/15,93/16} {
-		\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=3mm] at(\x + .5,-6) (b\n) {}
+	\foreach \x/\n in {3/6,8/7,13/8,18/9,23/10,28/11,41/12,55/13,68/14,73/15,78/16} {
+		\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=4mm] at(\x,-6) (b\n) {}
 			node[above=7mm, below of=b\n] {\tiny \n};
 	};
 	\path[draw,->]
