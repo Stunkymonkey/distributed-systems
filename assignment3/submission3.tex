@@ -103,12 +103,68 @@ d = 1 & \\
 \begin{align*}
 O = \frac12((t_2 - t_1) - (t_4 - t_3)) = \frac12((4 - 8) - (11 - 5)) = \frac12(-4 - 6) = -5  &\\
 d = 1 & \\
-\Delta = 3, C_s(t_4 + \Delta) = 14 & \\
-\frac{dC_S}{dt} = \frac{3}{3 +5} = \frac{3}{8} &
+\Delta = 8, C_s(t_4 + \Delta) = 14 & \\
+\frac{dC_S}{dt} = \frac{8 - 5}{8} = \frac{3}{8} &
 \end{align*}
-	
 
 \subsection*{b)}
+\begin{enumerate}[label=(\roman*)]
+
+	\item We can use the difference in offsets to determine the clockrate of the master node in relation to the subservient node.
+	For that purpose we calculate \(O_1 = \frac12((t_6 - t_5) - (t_8 - t_7))\) and \(O_0 = \frac12((t_2 - t_1) - (t_4 - t_3))\).
+	
+	It's clear that \(\frac{O_1 - O_0}{t_6 - t_2}\) is the rate at which the clocks are desynchronizing in reference to the master clock.
+	If \(O_1 - O_0\) is negative, the subservient clock is faster than the master, and vice versa.
+	This means that for negative \(O_1 - O_0\), the frequency ratio is \(f = \frac{t_6 - t_2}{O_0 - O_1}\).
+	For a faster master clock the frequency ratio is the desynchronization rate from before.
+
+	\item It makes no sense to synchronize the clock rates before the clock values, because to enable a ''stable'' value synchronization  -- i.e. monotonically increasing without large gaps in tick-time or clockvalues -- the clock frequency needs to be adjusted again.
+	As such, the synchronized clock frequency would need to be changed again to synchronize clock values, making it an unnecessary step.
+
+	\item Synchronization of the depicted clocks.
+	\begin{align*}
+		O_0 = \frac12((5-6)-(9-6)) = 1 & \\
+		O_1 = \frac12((8-11) - (14-9)) = -4 & \\
+		d = \frac12((8-11) + (14-9)) = 1 & \\
+		f = \frac{(8 - 5)}{1 - (-4)} = \frac35 &
+	\end{align*}
+
+	We choose \(\Delta = 8, C_s(t_8 + \Delta) = 18\) modifying the clock frequency of \(C_s\) to \(f * \frac{\Delta + O_1}{\Delta}\) of the original frequency.
+	When \(t_8 + \Delta\), we again modify the frequency by \(\frac{\Delta}{\Delta - O_1}\) to return to the synchronized clock freqency.
+	
+	This means \(\frac{dC_s}{dt} = f * \frac{8 - 4}{8} = f * \frac12 = \frac{3}{10}\)
+
+	\item Completing the figure.
+	\begin{figure}[ht!]
+		\begin{tikzpicture}[scale=0.2]
+		\foreach \x in {1,...,81} {
+			\draw (\x,0) -- (\x, 2);
+			\draw (\x, -5) -- (\x, -7);
+		};
+		\draw (0,0) -- (81,0);
+		\draw (0,-5) -- (81,-5);
+		\node at(0, -1) {\tiny Master};
+		\node at(0, -4) {\tiny Slave};
+		\foreach \x/\n in {3/4,8/5,13/6,18/7,23/8,28/9,33/10,38/11,43/12,48/13,53/14,58/15,63/16,68/17,73/18,78/19} {
+			\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=4mm] at(\x,1) (a\n) {}
+				node[below=7mm, above of=a\n] {\tiny \n};
+		};
+		\foreach \x/\n in {3/5,6/6,9/7,12/8,15/9,18/10,21/11,24/12,27/13,30/14,40/15,50/16,60/17,70/18,75/19,80/20} {
+			\draw node[rectangle, fill=black, text width=1mm, inner sep=0, minimum height=4mm] at(\x,-6) (b\n) {}
+				node[above=7mm, below of=b\n] {\tiny \n};
+		};
+		\path[draw,->]
+			(b6.north) edge (a5.south)
+			(a6.south) edge (b9.north)
+			(b11.north) edge (a8.south)
+			(a9.south) edge (b14.north);
+	\end{tikzpicture}
+	\caption{Solution for Figure 2}
+	\end{figure}
+
+	Note that the delay is not used in the timing schema proposed in (i).
+	It has been included in the calculations for (iii) for completeness' sake.
+\end{enumerate}
 
 \section*{2 - Logical Clocks}
 \subsection*{a)}
