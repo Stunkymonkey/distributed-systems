@@ -182,13 +182,39 @@ public class Monitor implements Runnable {
 	 * @return list of all reachable states
 	 */
 	private LinkedList<State> findReachableStates(State state) {
-		// TODO
 		/*
 		 * Given a state, implement a code that find all reachable states. The
 		 * function should return a list of all reachable states
-		 *
 		 */
-		return null;
+		LinkedList<State> reachable = new LinkedList<State>();
+		// current vector clocks
+		ArrayList<VectorClock> vClocks = new ArrayList<VectorClock>();
+		for (int i = 0; i < numberOfProcesses; i++) {
+			VectorClock curr_vc = processesMessages.get(i).get(state.getProcessMessageCurrentIndex(i)).getVectorClock();
+			vClocks.add(i, curr_vc);
+		}
+		// for each process
+		outer: for (int i = 0; i < numberOfProcesses; i++) {
+			int next = state.getProcessMessageCurrentIndex(i) + 1;
+			// check if process has no more lines
+			if (processesMessages.get(i).size() <= next) {
+				continue;
+			}
+			VectorClock next_vc = processesMessages.get(i).get(next).getVectorClock();
+			for (int j = 0; j < numberOfProcesses; j++) {
+				if (i == j) {
+					continue;
+				} else if (!next_vc.checkConsistency(j, vClocks.get(j))) {
+					// skip if not consistent
+					continue outer;
+				}
+			}
+			// adds reachable state
+			int[] new_indexes = state.getProcessesMessagesCurrentIndex().clone();
+			new_indexes[i] += 1;
+			reachable.add(new State(new_indexes));
+		}
+		return reachable;
 	}
 
 	/**
@@ -213,8 +239,6 @@ public class Monitor implements Runnable {
 		 * Predicate.predicate0(process_i_Message, process_j_Message); break;
 		 * case 1: ... }
 		 */
-
 		 return false;
 	}
-
 }
