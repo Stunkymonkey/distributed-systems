@@ -13,7 +13,6 @@ public class Process3 extends AbstractProcess {
 	@Override
 	public void run() {
 
-		//TODO Implement processes3 (Listing 4) code here!
 		// send the initial state to Monitor
 		Message message = new Message(new VectorClock(vectorClock), this.localVariable);
 		monitor.receiveMessage(this.Id, message);
@@ -59,6 +58,8 @@ public class Process3 extends AbstractProcess {
 		// line 5: send ( P1 , x3 )
 		send(0, message);
 
+		// send terminate signal
+		monitor.processTerminated(this.Id);
 		System.out.printf("process:%d , the local variable= %d\n", this.Id, this.localVariable);
 	}
 }
