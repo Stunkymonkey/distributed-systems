@@ -25,12 +25,10 @@ public class Predicate {
 	}
 
 	static public boolean predicate3(Message process_i_Message, Message process_j_Message) {
-		// TODO
 		/*
 		 * Add you code here to implement predicate1 x1- x3=8
 		 */
-
-		return false;
+		return (process_i_Message.getLocalVariable() - process_j_Message.getLocalVariable() == 8);
 	}
 
 }

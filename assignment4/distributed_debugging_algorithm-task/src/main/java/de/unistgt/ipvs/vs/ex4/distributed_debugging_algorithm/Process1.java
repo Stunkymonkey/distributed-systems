@@ -49,8 +49,19 @@ public class Process1 extends AbstractProcess {
 		message = new Message(new VectorClock(vectorClock), this.localVariable);
 		monitor.receiveMessage(this.Id, message);
 
-		// TODO add part (c) changes here!
-		
+		// line 6
+		send(2, message); // send to process 1
+
+		// line 7
+		// receive
+		receivedMessage = receive(1); // receive from process 1
+		this.vectorClock.update(receivedMessage.getVectorClock());
+		this.localVariable = receivedMessage.getLocalVariable() - this.localVariable;
+		this.vectorClock.increment();
+
+		// notify the monitor
+		message = new Message(new VectorClock(vectorClock), this.localVariable);
+		monitor.receiveMessage(this.Id, message);
 
 		// send terminate signal
 		monitor.processTerminated(this.Id);
