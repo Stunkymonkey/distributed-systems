@@ -21,25 +21,25 @@ public class VectorClock {
 	}
 
 	public void increment() {
-		// TODO
 		/*
 		 * Complete a code to increment the local clock component
 		 */
-
+		vectorClock[processId] += 1;
 	}
 
 	public int[] get() {
-		// TODO
 		// Complete a code to return the vectorClock value
-		return null;
+		return vectorClock;
 	}
 
 	public void update(VectorClock other) {
-		// TODO
 		/*
 		 * Implement Supermum operation
 		 */
-
+		this.increment();
+		for (int i = 0; i < vectorClock.length; i++) {
+			vectorClock[i] = Math.max(vectorClock[i], other.get()[i]);
+		}
 	}
 
 	public boolean checkConsistency(int otherProcessId, VectorClock other) {
@@ -48,9 +48,6 @@ public class VectorClock {
 		 * Implement a code to check if a state is consist regarding two vector clocks (i.e. this and other).
 		 * See slide 41 from global state lecture.
 		 */
-
-		return false;
-
+		return vectorClock[otherProcessId] == other.get()[otherProcessId];
 	}
-
 }
