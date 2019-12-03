@@ -23,7 +23,6 @@ public class Process2 extends AbstractProcess {
 		this.vectorClock.update(receivedMessage.getVectorClock());
 		this.localVariable = receivedMessage.getLocalVariable();
 		this.vectorClock.increment();
-
 		// notify the monitor
 		message = new Message(new VectorClock(vectorClock), this.localVariable);
 		monitor.receiveMessage(this.Id, message);

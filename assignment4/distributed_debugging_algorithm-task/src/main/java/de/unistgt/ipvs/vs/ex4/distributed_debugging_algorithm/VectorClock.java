@@ -1,23 +1,21 @@
 package de.unistgt.ipvs.vs.ex4.distributed_debugging_algorithm;
 
+import java.util.Arrays;
+
 //you are not allowed to change this class structure
 public class VectorClock {
 
 	protected int[] vectorClock;
 	private int processId;
-	private int numberOfProcesses;
 
 	public VectorClock(int processId, int numberOfProcesses) {
 		vectorClock = new int[numberOfProcesses];
-		this.numberOfProcesses = numberOfProcesses;
 		this.processId = processId;
 	}
 
 	VectorClock(VectorClock other) {
 		vectorClock = other.vectorClock.clone();
 		processId = other.processId;
-		numberOfProcesses = other.numberOfProcesses;
-
 	}
 
 	public void increment() {

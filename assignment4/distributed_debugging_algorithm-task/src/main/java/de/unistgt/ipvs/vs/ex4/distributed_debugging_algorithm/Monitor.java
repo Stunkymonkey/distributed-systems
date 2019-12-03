@@ -16,18 +16,15 @@ public class Monitor implements Runnable {
      */
     private class State {
         // Message indices of each process
-        private int[] processesMessagesCurrentIndex;
+        private final int[] processesMessagesCurrentIndex;
 
         public State(int numberOfProcesses) {
-            processesMessagesCurrentIndex = new int[numberOfProcesses];
+            // new array automatically initializes clocks to zero
+            this(new int[numberOfProcesses]);
         }
 
         public State(int[] processesMessagesCurrentIndex) {
             this.processesMessagesCurrentIndex = processesMessagesCurrentIndex;
-        }
-
-        {
-            processesMessagesCurrentIndex = new int[numberOfProcesses];
         }
 
         public int[] getProcessesMessagesCurrentIndex() {
@@ -35,7 +32,7 @@ public class Monitor implements Runnable {
         }
 
         public int getProcessMessageCurrentIndex(int processId) {
-            return this.processesMessagesCurrentIndex[processId];
+            return processesMessagesCurrentIndex[processId];
         }
 
         @Override
@@ -43,10 +40,11 @@ public class Monitor implements Runnable {
             State otherState = (State) other;
 
             // Iterate over processesMessagesCurrentIndex array
-            for (int i = 0; i < numberOfProcesses; i++)
-                if (this.processesMessagesCurrentIndex[i] != otherState.processesMessagesCurrentIndex[i])
+            for (int i = 0; i < numberOfProcesses; i++) {
+                if (this.processesMessagesCurrentIndex[i] != otherState.processesMessagesCurrentIndex[i]) {
                     return false;
-
+                }
+            }
             return true;
         }
 
@@ -90,16 +88,11 @@ public class Monitor implements Runnable {
 
         states = new LinkedList<>();
 
-        possiblyTruePredicatesIndex = new boolean[numberOfPredicates];// there
-        // are
-        // three
-        // predicates
-        for (int i = 0; i < numberOfPredicates; i++)
-            possiblyTruePredicatesIndex[i] = false;
-
+        possiblyTruePredicatesIndex = new boolean[numberOfPredicates];
+        Arrays.fill(possiblyTruePredicatesIndex, false);
+        
         definitelyTruePredicatesIndex = new boolean[numberOfPredicates];
-        for (int i = 0; i < numberOfPredicates; i++)
-            definitelyTruePredicatesIndex[i] = false;
+        Arrays.fill(definitelyTruePredicatesIndex, false);
     }
 
     /**
@@ -135,12 +128,13 @@ public class Monitor implements Runnable {
     @Override
     public void run() {
         // wait till all processes terminate
-        while (runningProcesses.get() != 0)
+        while (runningProcesses.get() != 0) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
 
         // create initial state (S00)
         State initialState = new State(numberOfProcesses);
@@ -200,17 +194,17 @@ public class Monitor implements Runnable {
 
         System.out.print("Lattice : ");
         for (State s : states) {
-			System.out.print("(" + s.getProcessMessageCurrentIndex(0) + "," + s.getProcessMessageCurrentIndex(1));
-        	if (numberOfProcesses > 2) {
-				System.out.print("," + s.getProcessMessageCurrentIndex(2));
-			}
-        	System.out.println(")");
+            System.out.print("(" + s.getProcessMessageCurrentIndex(0) + "," + s.getProcessMessageCurrentIndex(1));
+            if (numberOfProcesses > 2) {
+                System.out.print("," + s.getProcessMessageCurrentIndex(2));
+            }
+            System.out.println(")");
         }
 
         // check predicates
         definitelyTruePredicatesIndex[predicateNo] = checkPredicate(predicateNo, process_i_id, process_j_id);
-		System.out.println("Possibly True : " + possiblyTruePredicatesIndex[predicateNo]);
-		System.out.println("Definitely True : " + definitelyTruePredicatesIndex[predicateNo]);
+        System.out.println("Possibly True : " + possiblyTruePredicatesIndex[predicateNo]);
+        System.out.println("Definitely True : " + definitelyTruePredicatesIndex[predicateNo]);
     }
 
     /**
@@ -305,18 +299,18 @@ public class Monitor implements Runnable {
     }
 
     private boolean getPredicateNo(int predicateNo, Message msg_i, Message msg_j) {
-		switch (predicateNo) {
-			case 0:
-				return Predicate.predicate0(msg_i, msg_j);
-			case 1:
-				return Predicate.predicate1(msg_i, msg_j);
-			case 2:
-				return Predicate.predicate2(msg_i, msg_j);
-			case 3:
-				return Predicate.predicate3(msg_i, msg_j);
-			default:
-				System.out.println("predicate not implemented!");
-		}
-		return false;
-	}
+        switch (predicateNo) {
+            case 0:
+                return Predicate.predicate0(msg_i, msg_j);
+            case 1:
+                return Predicate.predicate1(msg_i, msg_j);
+            case 2:
+                return Predicate.predicate2(msg_i, msg_j);
+            case 3:
+                return Predicate.predicate3(msg_i, msg_j);
+            default:
+                System.out.println("predicate not implemented!");
+        }
+        return false;
+    }
 }
