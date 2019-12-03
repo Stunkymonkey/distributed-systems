@@ -48,6 +48,14 @@ public class VectorClock {
 		 * Implement a code to check if a state is consist regarding two vector clocks (i.e. this and other).
 		 * See slide 41 from global state lecture.
 		 */
-		return vectorClock[otherProcessId] == other.get()[otherProcessId];
+               return vectorClock[otherProcessId] == other.get()[otherProcessId];
+	}
+
+	@Override
+	public String toString() {
+		// debugger display
+		String[] parts = Arrays.stream(vectorClock).mapToObj(String::valueOf).toArray(String[]::new);
+		parts[processId] = "(" + parts[processId] + ")";
+		return "[" + String.join(", ", parts) + "]";
 	}
 }

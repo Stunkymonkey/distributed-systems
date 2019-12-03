@@ -49,6 +49,12 @@ public class Monitor implements Runnable {
 
             return true;
         }
+
+        @Override
+        public String toString() {
+            // debugger display
+            return "[" + String.join(", ", Arrays.stream(processesMessagesCurrentIndex).mapToObj(String::valueOf).toArray(String[]::new)) + "]";
+        }
     }
 
     private int numberOfProcesses;

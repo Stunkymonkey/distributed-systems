@@ -17,4 +17,10 @@ public class Message {
 	public VectorClock getVectorClock() {
 		return vectorClock;
 	}
+
+	@Override
+	public String toString() {
+		// Debugger display
+		return localVariable + "@" + vectorClock.toString();
+	}
 }
