@@ -159,7 +159,6 @@ public class Monitor implements Runnable {
     }
 
     public void buildLattice(int predicateNo, int process_i_id, int process_j_id) {
-        // TODO check if works
         /*
          * - implement this function to build the lattice of consistent states.
          * - The goal of building the lattice is to check a predicate if it is
@@ -270,32 +269,50 @@ public class Monitor implements Runnable {
          * Predicate.predicate0(process_i_Message, process_j_Message); break;
          * case 1: ... }
          */
-		// Check if possibly true
-		for (State s : states) {
-			// get messages
-			int index_i = s.getProcessMessageCurrentIndex(process_i_id);
-			int index_j = s.getProcessMessageCurrentIndex(process_j_id);
-			Message msg_i = processesMessages.get(process_i_id).get(index_i);
-			Message msg_j = processesMessages.get(process_j_id).get(index_j);
-			// selects predicate
-			if (getPredicateNo(predicateNo, msg_i, msg_j)) {
-				possiblyTruePredicatesIndex[predicateNo] = true;
-				break;
-			}
-		}
-
-		// TODO
-		// Check if definitely true
-		boolean predicate = false;
-		// states in one level
-		LinkedList<State> states_l = new LinkedList<State>();
-		states_l.add(states.getFirst());
-
-		/*while (!states_l.isEmpty()) {
-			getPredicateNo(predicateNo, msg_i, msg_j);
-		}*/
-
+        boolean predicate = true;
+        List<List<State>> linearizations = determineLinearizations(states.getFirst());
+        for (Iterable<State> linearization : linearizations) {
+            boolean ok = false;
+            for (State state : linearization) {            // get messages
+                int index_i = state.getProcessMessageCurrentIndex(process_i_id);
+                int index_j = state.getProcessMessageCurrentIndex(process_j_id);
+                Message msg_i = processesMessages.get(process_i_id).get(index_i);
+                Message msg_j = processesMessages.get(process_j_id).get(index_j);
+                if (getPredicateNo(predicateNo, msg_i, msg_j)) {
+                    // found at least one linearization that fulfils the predicate,
+                    // therefore the predicate is possibly true
+                    possiblyTruePredicatesIndex[predicateNo] = true;
+                    ok = true;
+                    break;
+                }
+            }
+            if (!ok) {
+                predicate = false;
+                break;
+            }
+        }
         return predicate;
+    }
+
+    /**
+     * Recursively determines all possible linearizations when starting from the given state.
+     * If the given state is a terminal state, the only possible linearization is that state itself.
+     */
+    private List<List<State>> determineLinearizations(State root) {
+        List<State> reachable = findReachableStates(root);
+        List<List<State>> results = new LinkedList<>();
+        for (State succ : reachable) {
+            List<List<State>> succLins = determineLinearizations(succ);
+            // prepend the root to all the successor linearizations
+            succLins.stream().forEach(l -> l.add(0, root));
+            // and then add the modified linearizations to the result
+            results.addAll(succLins);
+        }
+        // if there's no successors, the linearization is just the root state
+        if (results.isEmpty()) {
+            results.add(new LinkedList<>(Collections.singleton(root)));
+        }
+        return results;
     }
 
     private boolean getPredicateNo(int predicateNo, Message msg_i, Message msg_j) {
