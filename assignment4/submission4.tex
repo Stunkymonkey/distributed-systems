@@ -46,8 +46,78 @@
 \subsection*{a)}
 \subsection*{b)}
 \subsection*{c)}
-\subsection*{d)}
 
+\tikzstyle{nofill}=[rectangle,draw, align=center]
+\tikzstyle{green}=[rectangle,draw,fill=green!50,align=center]
+\tikzstyle{blue}=[rectangle,draw,fill=blue!50,align=center]
+\tikzstyle{both}=[rectangle,draw,fill=red!50!,align=center]
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[auto,node distance=1.5cm]
+\node[green] (s00) {$ S_{00} $ \\ $ x_1 = 0 $ \\ $ x_2 = 0 $};
+
+\node[both] (s10) [below left = of s00] {$ S_{10} $ \\ $ x_1 = 10 $ \\ $ x_2 = 0 $};
+
+\node[both] (s20) [below left = of s10] {$ S_{20} $ \\ $ x_1 = 5 $ \\ $ x_2 = 0 $};
+\node[green] (s11) [below right = of s10] {$ S_{11} $ \\ $ x_1 = 10 $ \\ $ x_2 = 20 $};
+
+\node[both] (s30) [below left = of s20] {$ S_{30} $ \\ $ x_1 = 15 $ \\ $ x_2 = 0 $};
+\node[green] (s21) [below left = of s11] {$ S_{21} $ \\ $ x_1 = 5 $ \\ $ x_2 = 20 $};
+\node[green] (s12) [below right = of s11] {$ S_{12} $ \\ $ x_1 = 10 $ \\ $ x_2 = 30 $};
+
+\node[nofill] (s31) [below left = of s21] {$ S_{31} $ \\ $ x_1 = 15 $ \\ $ x_2 = 20 $};
+\node[green] (s22) [below left = of s12] {$ S_{22} $ \\ $ x_1 = 5 $ \\ $ x_2 = 30 $};
+
+\node[green] (s32) [below left = of s22] {$ S_{32} $ \\ $ x_1 = 15 $ \\ $ x_2 = 30 $};
+
+\node[both] (s42) [below left = of s32] {$ S_{42} $ \\ $ x_1 = 55 $ \\ $ x_2 = 30 $};
+
+\node[both] (s52) [below left = of s42] {$ S_{52} $ \\ $ x_1 = 60 $ \\ $ x_2 = 30 $};
+
+\node[both] (s53) [below right = of s52] {$ S_{53} $ \\ $ x_1 = 60 $ \\ $ x_2 = 13 $};
+
+\path (s10) edge node {} (s00);
+
+\path (s10) edge node {} (s11);
+\path (s10) edge node {} (s20);
+
+\path (s11) edge node {} (s21);
+\path (s20) edge node {} (s21);
+\path (s20) edge node {} (s30);
+\path (s11) edge node {} (s12);
+
+\path (s30) edge node {} (s31);
+\path (s21) edge node {} (s31);
+\path (s21) edge node {} (s22);
+\path (s12) edge node {} (s22);
+
+
+\path (s31) edge node {} (s32);
+\path (s22) edge node {} (s32);
+
+\path (s32) edge node {} (s42);
+
+\path (s42) edge node {} (s52);
+
+\path (s52) edge node {} (s53);
+\end{tikzpicture}
+\caption{solution for 1.c)}
+\end{figure}
+
+\subsection*{d)}
+\begin{itemize}
+	\item $ \phi_{1} = (x_{2} - x_{1}) = 5 $\\
+	$ \Rightarrow (\neg\phi_{1}) $ marked in \textcolor{blue}{blue}
+	\item $ \phi_{2} = (x_{2} - x_{1}) \leq 5 $ and $ (x_{2} - x_{1}) > 0 $\\
+	$ \Rightarrow (\phi_{2}) $ marked in \textcolor{green}{green}
+	\item if they fulfill $ (\neg\phi_{1}) $ and $ (\phi_{2}) $ marked in \textcolor{red}{red}
+\end{itemize}
+
+\begin{enumerate}
+	\item safety condition $ \neg\phi_{1} $ is not fulfilled in the state $ S_{31} $and thereby not fulfilled.
+	\item liveness condition $ \phi_{2} $ is fulfilled in the end and thereby fulfilled.
+\end{enumerate}
 \section*{2 - Transaction Processing}
 \subsection*{a)}
 \subsection*{b)}
