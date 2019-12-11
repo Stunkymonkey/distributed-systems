@@ -44,7 +44,23 @@
 
 \section*{1 - Global State}
 \subsection*{a)}
+$C_{1}$: $e_{11}$ $e_{21}$ $e_{31}$ $e_{12}$ $e_{22}$\\
+$C_{2}$: $e_{11}$ $e_{21}$ $e_{31}$ $e_{12}$ $e_{22}$ $e_{41}$
+
 \subsection*{b)}
+\begin{enumerate}[label=(\roman*)]
+\item
+The inequation give true for all states that can follow the first one given independant on how many states lie between them. To make sure that the other state lies on level L+1 you can either check if any other state lies between them or check the timestamps. The stamp of the prosess with tha last event has to be 1 higher than in the other state.
+\item
+$S_{30}$ -> $S_{31}$ = true
+$S_{30}$ -> $S_{32}$ = true
+$S_{30}$ -> $S_{42}$ = true
+
+$S_{31}$ -> $S_{32}$ = true
+$S_{32}$ -> $S_{42}$ = true
+So $S_{32}$ and $S_{42}$ are not on level L+1, because $S_{31}$ lies between them and $S_{30}$.\\
+You either have to check the timestamps (not given) or check all other states if they lie between $S_{30}$ and $S_{31}$. Non of them do so $S_{31}$ is on level l+1 of $S_{30}$.
+\end{enumerate}
 \subsection*{c)}
 
 \tikzstyle{nofill}=[rectangle,draw, align=center]
