@@ -17,6 +17,7 @@
 \usepackage{tabularx}
 \usepackage{enumerate}
 \usepackage{enumitem}
+\usepackage{float}
 %\usepackage{minted}
 \usepackage {tikz}
 \usetikzlibrary{positioning}
@@ -52,23 +53,24 @@ $C_{2}$: $e_{11}$ $e_{21}$ $e_{31}$ $e_{12}$ $e_{22}$ $e_{41}$
 \item
 The inequation give true for all states that can follow the first one given independant on how many states lie between them. To make sure that the other state lies on level L+1 you can either check if any other state lies between them or check the timestamps. The stamp of the prosess with tha last event has to be 1 higher than in the other state.
 \item
-$S_{30}$ -> $S_{31}$ = true
-$S_{30}$ -> $S_{32}$ = true
-$S_{30}$ -> $S_{42}$ = true
+$S_{30} \rightarrow S_{31}$ = true\\
+$S_{30} \rightarrow S_{32}$ = true\\
+$S_{30} \rightarrow S_{42}$ = true
 
-$S_{31}$ -> $S_{32}$ = true
-$S_{32}$ -> $S_{42}$ = true
+$S_{31} \rightarrow S_{32}$ = true\\
+$S_{32} \rightarrow S_{42}$ = true\\
+
 So $S_{32}$ and $S_{42}$ are not on level L+1, because $S_{31}$ lies between them and $S_{30}$.\\
 You either have to check the timestamps (not given) or check all other states if they lie between $S_{30}$ and $S_{31}$. Non of them do so $S_{31}$ is on level l+1 of $S_{30}$.
 \end{enumerate}
-\subsection*{c)}
+\subsection*{c)} See Figure 1
 
 \tikzstyle{nofill}=[rectangle,draw, align=center]
 \tikzstyle{green}=[rectangle,draw,fill=green!50,align=center]
 \tikzstyle{blue}=[rectangle,draw,fill=blue!50,align=center]
 \tikzstyle{both}=[rectangle,draw,fill=red!50!,align=center]
 
-\begin{figure}[!ht]
+\begin{figure}[]
 \centering
 \begin{tikzpicture}[auto,node distance=1.5cm]
 \node[green] (s00) {$ S_{00} $ \\ $ x_1 = 0 $ \\ $ x_2 = 0 $};
@@ -134,14 +136,18 @@ You either have to check the timestamps (not given) or check all other states if
 	\item safety condition $ \neg\phi_{1} $ is not fulfilled in the state $ S_{31} $ and thereby not fulfilled.
 	\item liveness condition $ \phi_{2} $ is fulfilled in the end and thereby fulfilled.
 \end{enumerate}
+
+
 \section*{2 - Transaction Processing}
+
 \subsection*{a)}
 The conflicting operation pairs are:
 \[\{(w_1[u], w_3[u]), (r_1[y], w_2[y]), (r_3[y], w_2[y]), (r_2[x], w_3[x])\}\]
 
 \subsection*{b)}
 
-\begin{figure}[ht!]
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}
     \node[draw, circle] at (0, 0)    (T1) {\(T_1\)};
     \node[draw, circle] at (5, 0)    (T2) {\(T_2\)};
@@ -158,7 +164,8 @@ The conflicting operation pairs are:
 
 It's clear that the serialization graph shown in Figure \ref{fig:sg_h1} contains a cycle, as such \(H_1\) is not serializable.\\~\\
 
-\begin{figure}[ht!]
+\begin{figure}[H]
+\centering
 \begin{tikzpicture}
     \node[draw, circle] at (0, 0)    (T1) {\(T_1\)};
     \node[draw, circle] at (5, 0)    (T2) {\(T_2\)};
