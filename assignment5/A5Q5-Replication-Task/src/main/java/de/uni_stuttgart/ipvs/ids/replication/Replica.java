@@ -60,9 +60,8 @@ public class Replica<T> extends Thread {
 	 * - Does the requesting client hold the correct lock?
 	 * - Is the replica unlocked when a new lock is requested?
 	 */
-	public void run() {
-		// TODO: Implement me!
-
+	public void run()
+	{
 		byte[] buffer = new byte[2048];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 

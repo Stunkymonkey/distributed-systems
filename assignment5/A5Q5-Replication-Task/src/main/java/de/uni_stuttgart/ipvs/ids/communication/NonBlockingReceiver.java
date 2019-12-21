@@ -48,14 +48,21 @@ public class NonBlockingReceiver {
 				socket.receive(packet);
 
 				ret.add(packet);
-			} catch (SocketTimeoutException e)
+
+				//All messages received
+				if(ret.size() == expectedMessages)
+					break;
+
+			}
+			catch (SocketTimeoutException e)
 			{
 				//Timeout reached
 				break;
 			}
 		}
-
-		return null;
+		//Set socket back to none timeout mode
+		socket.setSoTimeout(0);
+		return ret;
 	}
 
 	public static <T> Collection<MessageWithSource<T>> unpack(
@@ -66,10 +73,12 @@ public class NonBlockingReceiver {
 		for(DatagramPacket packet : packetCollection)
 		{
 			ObjectInputStream iStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
-			ret.add((MessageWithSource<T>)iStream.readObject());
+			MessageWithSource mws = new MessageWithSource(packet.getSocketAddress(), iStream.readObject());
+			iStream.close();
+			ret.add(mws);
 		}
 
-		return null;
+		return ret;
 	}
 	
 }
