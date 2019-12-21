@@ -1,15 +1,12 @@
 package de.uni_stuttgart.ipvs.ids.replication;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.util.Random;
 
 import de.uni_stuttgart.ipvs.ids.communication.ReadRequestMessage;
 import de.uni_stuttgart.ipvs.ids.communication.ReleaseReadLock;
@@ -65,6 +62,142 @@ public class Replica<T> extends Thread {
 	 */
 	public void run() {
 		// TODO: Implement me!
+
+		byte[] buffer = new byte[2048];
+		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+
+		Random random = new Random();
+
+		while(true)
+		{
+			try
+			{
+				socket.receive(packet);
+				ObjectInputStream iStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
+				Object msg = iStream.readObject();
+				iStream.close();
+
+				//Simulating crashed Nodes
+				//Only happend if node is unlocked
+				if(lock == LockType.UNLOCKED && random.nextDouble()>availability)
+					continue;
+
+				if(msg instanceof RequestReadVote)
+				{
+					if(lock != LockType.WRITELOCK)
+					{
+						lock = LockType.READLOCK;
+						lockHolder = packet.getSocketAddress();
+
+						sendVote(packet.getSocketAddress(), Vote.State.YES, value.version);
+						continue;
+					}
+					else
+					{
+						sendVote(packet.getSocketAddress(), Vote.State.NO, value.version);
+						continue;
+					}
+				}
+
+				if(msg instanceof ReleaseReadLock)
+				{
+					if(lock == LockType.READLOCK && lockHolder.equals(packet.getSocketAddress()))
+					{
+						lock = LockType.UNLOCKED;
+						lockHolder = null;
+						sendVote(packet.getSocketAddress(), Vote.State.YES, value.version);
+						continue;
+					}
+					else
+					{
+						sendVote(packet.getSocketAddress(), Vote.State.NO, value.version);
+						continue;
+					}
+				}
+
+				if(msg instanceof ReadRequestMessage)
+				{
+					if(lock == LockType.READLOCK && lockHolder.equals(packet.getSocketAddress()))
+					{
+						ValueResponseMessage responseMessage = new ValueResponseMessage(value.value);
+
+						ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+						ObjectOutput oo = new ObjectOutputStream(bStream);
+						oo.writeObject(responseMessage);
+						oo.close();
+
+						byte[] byteMsg = bStream.toByteArray();
+
+						DatagramSocket socket = new DatagramSocket();
+						socket.send(new DatagramPacket(byteMsg, byteMsg.length, packet.getSocketAddress()));
+						continue;
+					}
+					else
+					{
+						sendVote(packet.getSocketAddress(), Vote.State.NO, value.version);
+						continue;
+					}
+				}
+
+				if(msg instanceof RequestWriteVote)
+				{
+					if(lock == LockType.UNLOCKED)
+					{
+						lock = LockType.WRITELOCK;
+						lockHolder = packet.getSocketAddress();
+
+						sendVote(packet.getSocketAddress(), Vote.State.YES, value.version);
+						continue;
+					}
+					else
+					{
+						sendVote(packet.getSocketAddress(), Vote.State.NO, value.version);
+						continue;
+					}
+				}
+
+				if(msg instanceof RequestWriteVote)
+				{
+					if(lock == LockType.WRITELOCK && lockHolder.equals(packet.getSocketAddress()))
+					{
+						lock = LockType.UNLOCKED;
+						lockHolder = null;
+
+						sendVote(packet.getSocketAddress(), Vote.State.YES, value.version);
+						continue;
+					}
+					else
+					{
+						sendVote(packet.getSocketAddress(), Vote.State.NO, value.version);
+						continue;
+					}
+				}
+
+				if(msg instanceof WriteRequestMessage)
+				{
+
+					if(lock == LockType.WRITELOCK && lockHolder.equals(packet.getSocketAddress()))
+					{
+						VersionedValue<T> newValue = (VersionedValue) msg;
+
+						//Converting WriteRequestMessage to VersionedValue
+						value = new VersionedValue<>(newValue);
+
+						sendVote(packet.getSocketAddress(), Vote.State.YES, value.version);
+						continue;
+					}
+					else
+					{
+						sendVote(packet.getSocketAddress(), Vote.State.NO, value.version);
+						continue;
+					}
+				}
+			}
+			catch (IOException | ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -73,7 +206,19 @@ public class Replica<T> extends Thread {
 	 */
 	protected void sendVote(SocketAddress address,
 			Vote.State state, int version) throws IOException {
-		// TODO: Implement me!
+
+		Vote vote = new Vote(state, version);
+
+		ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+		ObjectOutput oo = new ObjectOutputStream(bStream);
+		oo.writeObject(vote);
+		oo.close();
+
+		byte[] msg = bStream.toByteArray();
+
+		DatagramSocket socket = new DatagramSocket();
+		DatagramPacket packet = new DatagramPacket(msg, msg.length, address);
+		socket.send(packet);
 	}
 
 	/**
