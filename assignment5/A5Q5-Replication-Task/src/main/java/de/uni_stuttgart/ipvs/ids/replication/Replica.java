@@ -66,22 +66,25 @@ public class Replica<T> extends Thread {
 		byte[] buffer = new byte[2048];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
+		//Used for the failure simulation
 		Random random = new Random();
 
 		while(true)
 		{
 			try
 			{
+				//recive und unpack object
 				socket.receive(packet);
-				ObjectInputStream iStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
-				Object msg = iStream.readObject();
-				iStream.close();
+				ObjectInputStream objStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
+				Object msg = objStream.readObject();
+				objStream.close();
 
 				//Simulating crashed Nodes
 				//Only happend if node is unlocked
 				if(lock == LockType.UNLOCKED && random.nextDouble()>availability)
 					continue;
 
+				//Take action based on object type
 				if(msg instanceof RequestReadVote)
 				{
 					if(lock != LockType.WRITELOCK)

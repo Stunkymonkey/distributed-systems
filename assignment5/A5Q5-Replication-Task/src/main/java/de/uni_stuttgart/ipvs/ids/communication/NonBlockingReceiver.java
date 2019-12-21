@@ -30,14 +30,45 @@ public class NonBlockingReceiver {
 
 	public Vector<DatagramPacket> receiveMessages(int timeoutMillis, int expectedMessages)
 			throws IOException {
-		// TODO: Impelement me!	
+
+		Vector<DatagramPacket> ret = new Vector<>();
+
+		//Get the start time
+		//The remaining time for the current timeout will be calculated based on this
+		long start = System.currentTimeMillis();
+
+		//Repeat while timeout is not reached
+		while(start + timeoutMillis > System.currentTimeMillis())
+		{
+			try
+			{
+				byte[] buffer = new byte[2048];
+				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+				socket.setSoTimeout((int) (System.currentTimeMillis() - start));
+				socket.receive(packet);
+
+				ret.add(packet);
+			} catch (SocketTimeoutException e)
+			{
+				//Timeout reached
+				break;
+			}
+		}
+
 		return null;
 	}
 
 	public static <T> Collection<MessageWithSource<T>> unpack(
 			Collection<DatagramPacket> packetCollection) throws IOException,
 			ClassNotFoundException {
-		// TODO: Impelement me!	
+		Vector<MessageWithSource<T>> ret = new Vector<>();
+
+		for(DatagramPacket packet : packetCollection)
+		{
+			ObjectInputStream iStream = new ObjectInputStream(new ByteArrayInputStream(packet.getData()));
+			ret.add((MessageWithSource<T>)iStream.readObject());
+		}
+
 		return null;
 	}
 	
