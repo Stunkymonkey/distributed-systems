@@ -29,9 +29,9 @@ public class Replica<T> extends Thread {
 	private VersionedValue<T> value;
 
 	protected DatagramSocket socket = null;
-	
+
 	protected LockType lock;
-	
+
 	/**
 	 * This address holds the addres of the client holding the lock. This
 	 * variable should be set to NULL every time the lock is set to UNLOCKED.
@@ -47,14 +47,14 @@ public class Replica<T> extends Thread {
 		this.value = new VersionedValue<T>(0, initialValue);
 		this.lock = LockType.UNLOCKED;
 	}
-	
+
 
 	/**
 	 * Part a) Implement this run method to receive and process request
 	 * messages. To simulate a replica that is sometimes unavailable, it should
 	 * randomly discard requests as long as it is not locked.
 	 * The probability for discarding a request is (1 - availability).
-	 * 
+	 *
 	 * For each request received, it must also be checked whether the request is valid.
 	 * For example:
 	 * - Does the requesting client hold the correct lock?
@@ -80,13 +80,14 @@ public class Replica<T> extends Thread {
 
 				//Simulating crashed Nodes
 				//Only happend if node is unlocked
-				if(lock == LockType.UNLOCKED && random.nextDouble()>availability)
+				if(lock == LockType.UNLOCKED && random.nextDouble()>availability) {
 					continue;
+				}
 
 				//Take action based on object type
 				if(msg instanceof RequestReadVote)
 				{
-					if(lock != LockType.WRITELOCK)
+					if(lock == LockType.UNLOCKED)
 					{
 						lock = LockType.READLOCK;
 						lockHolder = packet.getSocketAddress();
@@ -130,7 +131,6 @@ public class Replica<T> extends Thread {
 
 						byte[] byteMsg = bStream.toByteArray();
 
-						DatagramSocket socket = new DatagramSocket();
 						socket.send(new DatagramPacket(byteMsg, byteMsg.length, packet.getSocketAddress()));
 						continue;
 					}
@@ -158,7 +158,7 @@ public class Replica<T> extends Thread {
 					}
 				}
 
-				if(msg instanceof RequestWriteVote)
+				if(msg instanceof ReleaseWriteLock)
 				{
 					if(lock == LockType.WRITELOCK && lockHolder.equals(packet.getSocketAddress()))
 					{
@@ -178,7 +178,7 @@ public class Replica<T> extends Thread {
 				if(msg instanceof WriteRequestMessage)
 				{
 
-					if(lock == LockType.WRITELOCK && lockHolder.equals(packet.getSocketAddress()))
+					if(lock == LockType.WRITELOCK && lockHolder.equals(packet.getSocketAddress()) && ((VersionedValue) msg).version > value.version)
 					{
 						VersionedValue<T> newValue = (VersionedValue) msg;
 
@@ -201,7 +201,7 @@ public class Replica<T> extends Thread {
 			}
 		}
 	}
-	
+
 	/**
 	 * This is a helper method. You can implement it if you want to use it or just ignore it.
 	 * Its purpose is to send a Vote (YES/NO depending on the state) to the given address.
@@ -218,7 +218,6 @@ public class Replica<T> extends Thread {
 
 		byte[] msg = bStream.toByteArray();
 
-		DatagramSocket socket = new DatagramSocket();
 		DatagramPacket packet = new DatagramPacket(msg, msg.length, address);
 		socket.send(packet);
 	}
