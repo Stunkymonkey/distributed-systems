@@ -113,6 +113,11 @@
 \end{figure}
 
 \subsection*{b)}
+
+The transactions 2 and 3 need to be aborted / rolled back.
+This is because the abort of transaction 1 does not happen until after the locks for reading uncommitted data have been acquired, resulting in incorrect reads.
+To enforce consistency, the transactions must be aborted when transaction 1 is aborted.
+
 \subsection*{c)}
 
 \section*{2 - Two-Phase Commit}
