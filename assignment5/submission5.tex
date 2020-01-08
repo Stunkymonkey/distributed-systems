@@ -45,6 +45,9 @@
 
 \section*{1 - Two-Phase Locking}
 \subsection*{a)}
+
+See figure \ref{fig:1a}
+
 \begin{figure}[ht!]
 \label{fig:1a}
 \begin{tikzpicture}
@@ -97,14 +100,15 @@
     \node at (5,  7.5) {\(r_3[v]\)};
     \node at (5,  6.5) {\(wL_3[s]\)};
     \node at (5,  5.5) {\(rU_3[v]\)};
-    \node at (5,  4.5) {\(w_3[s]\)};
-    \node at (5,  3.5) {\(wU_3[s]\)};
-    \node at (5,  2.5) {\(c_3\)};
+    \node at (5,  4.5) {\(rU_3[s]\)};
+    \node at (5,  3.5) {\(w_3[s]\)};
+    \node at (5,  2.5) {\(wU_3[s]\)};
+    \node at (5,  1.5) {\(c_3\)};
 
     % draw the event markings in the timelines
     \foreach \x/\y in {0/14.5,0/13.5,0/12.5,0/11.5,0/10.5,0/9.5,0/8.5,0/7.5,0/6.5,0/5.5,%
                        3/14.5,3/13.5,3/5.5,3/4.5,3/3.5,3/2.5,3/1.5,%
-                       6/14.5,6/13.5,6/8.5,6/7.5,6/6.5,6/5.5,6/4.5,6/3.5,6/2.5,%
+                       6/14.5,6/13.5,6/8.5,6/7.5,6/6.5,6/5.5,6/4.5,6/3.5,6/2.5,6/1.5,%
                        9/14.5,9/13.5,9/12.5,9/11.5,9/10.5,9/9.5,9/8.5,9/7.5,9/6.5,9/5.5} {
         \draw[-] (\x-.25,\y) -- (\x+.25,\y);
     };
@@ -119,6 +123,76 @@ This is because the abort of transaction 1 does not happen until after the locks
 To enforce consistency, the transactions must be aborted when transaction 1 is aborted.
 
 \subsection*{c)}
+
+See figure \ref{fig:1c}
+
+\begin{figure}[ht!]
+    \label{fig:1c}
+    \begin{tikzpicture}
+        \draw[->] (0, 15) -- (0, -2);
+        \draw[->] (3, 15) -- (3, -2);
+        \draw[->] (6, 15) -- (6, -2);
+        \draw[->] (9, 15) -- (9, -2);
+    
+        \foreach \t/\p in {1/0,2/3,3/6,4/9} {
+          \draw node at (\p, 16) {\(T_\t\)};
+        };
+    
+        % transaction 4 can just be parallel
+        \node at ( 8, 14.5) {\(rL_4[u]\)};
+        \node at ( 8, 13.5) {\(r_4[u]\)};
+        \node at ( 8, 12.5) {\(rL_4[o]\)};
+        \node at ( 8, 11.5) {\(r_4[o]\)};
+        \node at ( 8, 10.5) {\(wL_4[y]\)};
+        \node at ( 8,  9.5) {\(w_4[y]\)};
+        \node at ( 8,  8.5) {\(c_4\)};
+        \node at ( 8,  7.5) {\(rU_4[u]\)};
+        \node at ( 8,  6.5) {\(rU_4[o]\)};
+        \node at ( 8,  5.5) {\(wU_4[y]\)};
+    
+        % transaction 1 does not need to wait
+        \node at (-1, 14.5) {\(rL_1[v]\)};
+        \node at (-1, 13.5) {\(r_1[v]\)};
+        \node at (-1, 12.5) {\(wL_1[v]\)};
+        \node at (-1, 11.5) {\(w_1[v]\)};
+        \node at (-1, 10.5) {\(wL_1[x]\)};
+        \node at (-1,  9.5) {\(w_1[x]\)};
+        \node at (-1,  8.5) {\(a_1\)};
+        \node at (-1,  7.5) {\(rU_1[v]\)};
+        \node at (-1,  6.5) {\(wU_1[v]\)};
+        \node at (-1,  5.5) {\(wU_1[x]\)};
+    
+        %transaction 2 needs to wait for wU[x]
+        \node at (2, 14.5) {\(wL_2[z]\)};
+        \node at (2, 13.5) {\(w_2[z]\)};
+        \node at (2,  4.5) {\(rL_2[x]\)};
+        \node at (2,  3.5) {\(r_2[x]\)};
+        \node at (2,  2.5) {\(c_2\)};
+        \node at (2,  1.5) {\(wU_2[z]\)};
+        \node at (2,  0.5) {\(rU_2[x]\)};
+    
+        %transaction 3 needs to wait for wU[v]
+        \node at (5, 14.5) {\(rL_3[s]\)};
+        \node at (5, 13.5) {\(r_3[s]\)};
+        \node at (5,  5.5) {\(rL_3[v]\)};
+        \node at (5,  4.5) {\(r_3[v]\)};
+        \node at (5,  3.5) {\(wL_3[s]\)};
+        \node at (5,  2.5) {\(w_3[s]\)};
+        \node at (5,  1.5) {\(c_3\)};
+        \node at (5,  0.5) {\(rU_3[s]\)};
+        \node at (5,  -0.5) {\(rU_3[v]\)};
+        \node at (5,  -1.5) {\(wU_3[s]\)};
+    
+        % draw the event markings in the timelines
+        \foreach \x/\y in {0/14.5,0/13.5,0/12.5,0/11.5,0/10.5,0/9.5,0/8.5,0/7.5,0/6.5,0/5.5,%
+                           3/14.5,3/13.5,3/4.5,3/3.5,3/2.5,3/1.5,3/0.5,%
+                           6/14.5,6/13.5,6/5.5,6/4.5,6/3.5,6/2.5,6/1.5,6/0.5,6/-0.5,6/-1.5%
+                           9/14.5,9/13.5,9/12.5,9/11.5,9/10.5,9/9.5,9/8.5,9/7.5,9/6.5,9/5.5} {
+            \draw[-] (\x-.25,\y) -- (\x+.25,\y);
+        };
+    \end{tikzpicture}
+    \caption{Operation timeline for History \(H_1\) using strict two-phase locking}
+    \end{figure}
 
 \section*{2 - Two-Phase Commit}
 \subsection*{a)}
