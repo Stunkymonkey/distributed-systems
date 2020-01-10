@@ -394,7 +394,32 @@ Shown in figure~\ref{fig:2c}.
 \newpage
 \section*{3 - Data Replication}
 \subsection*{a)}
+q[X$_A$] = 1\\
+q[X$_B$] = 1\\
+q[X$_C$] = 2\\
+q[X$_D$] = 1\\
+
+q$_w$[X] 1: X$_A$, X$_B$, X$_C$\\
+q$_w$[X] 2: X$_A$, X$_C$, X$_D$\\
+q$_w$[X] 3: X$_B$, X$_C$, X$_D$\\
+q$_w$[X] 3: X$_A$, X$_B$, X$_C$, X$_D$\\
+
+
+q$_r$[X] 1: X$_A$, X$_B$, X$_C$\\
+q$_r$[X] 3: X$_A$, X$_B$, X$_D$\\
+q$_r$[X] 2: X$_A$, X$_C$, X$_D$\\
+q$_r$[X] 3: X$_B$, X$_C$, X$_D$\\
+q$_r$[X] 3: X$_A$, X$_B$, X$_C$, X$_D$\\
+
 \subsection*{b)}
+q$_w$[X] = 6\\
+q$_w$[x] 1: X$_C$, X$_D$, X$_A$\\
+q$_w$[x] 2: X$_C$, X$_D$, X$_B$\\
+q$_w$[x] 3: X$_C$, X$_D$, X$_A$, X$_B$\\
+
+
 \subsection*{c)}
+p$_r$(Y) = 1-((1-p$_K$)*(1-p$_L$))-((1-p$_L$)*(1-p$_M$))-((1-p$_M$)*(1-p$_K$))-((1-p$_K$)*(1-p$_L$)*(1-p$_M$))
+To be readable a majority of nodes have to be available, which is 2 in this case. That means that 1-p$_r$(Y) is the probability that mor than 1 node fails.
 
 \end{document}
