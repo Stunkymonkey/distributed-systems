@@ -128,6 +128,8 @@ To enforce consistency, the transactions must be aborted when transaction 1 is a
 
 See figure \ref{fig:1c}
 
+Cascading abort does not happen with strict two phase locking because updated information from one transaction is only available for other transactions to read after the transaction either aborted or committed.
+
 \begin{figure}[!ht]
     \centering
     \begin{tikzpicture}
@@ -202,7 +204,7 @@ See figure \ref{fig:1c}
 \section*{2 - Two-Phase Commit}
 \subsection*{a)}
 
-Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'-Message is received. $ N_3 $ will try to resent the 'COMMIT'-Message until it receives the 'ACK'-Message.
+Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'-Message is received. $ N_3 $ will try to resend the 'COMMIT'-Message until it receives the 'ACK'-Message.
 
 \begin{figure}[!ht]
 	\centering
@@ -263,7 +265,7 @@ Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'
 
 \subsection*{b)}
 
-Shown in figure~\ref{fig:2b}. $ N_1 $ is getting send a 'DECISION-REQ'-Message to send the 'COMMIT'-Message to $ N_2 $. Same for $ N_5 $ because $ N_4 $ is not reachable.
+Shown in figure~\ref{fig:2b}. $ N_1 $ is getting sent a 'DECISION-REQ'-Message to send the 'COMMIT'-Message to $ N_2 $. Same for $ N_5 $ because $ N_4 $ is not reachable.
 
 \begin{figure}[!ht]
 	\centering
@@ -396,20 +398,27 @@ Shown in figure~\ref{fig:2c}.
 \subsection*{a)}
 q[X$_A$] = 1\\
 q[X$_B$] = 1\\
-q[X$_C$] = 2\\
+q[X$_C$] = 3\\
 q[X$_D$] = 1\\
 
-q$_w$[X] 1: X$_A$, X$_B$, X$_C$\\
-q$_w$[X] 2: X$_A$, X$_C$, X$_D$\\
-q$_w$[X] 3: X$_B$, X$_C$, X$_D$\\
-q$_w$[X] 3: X$_A$, X$_B$, X$_C$, X$_D$\\
+q$_w$[X] 1: X$_C$, X$_A$ \\
+q$_w$[X] 2: X$_C$, X$_B$ \\
+q$_w$[X] 3: X$_C$, X$_D$ \\
+q$_w$[X] 4: X$_C$, X$_A$, X$_B$ \\
+q$_w$[X] 5: X$_C$, X$_A$, X$_D$ \\
+q$_w$[X] 6: X$_C$, X$_B$, X$_D$ \\
+q$_w$[X] 7: X$_C$, X$_A$, X$_B$, X$_D$\\
 
 
-q$_r$[X] 1: X$_A$, X$_B$, X$_C$\\
-q$_r$[X] 3: X$_A$, X$_B$, X$_D$\\
-q$_r$[X] 2: X$_A$, X$_C$, X$_D$\\
-q$_r$[X] 3: X$_B$, X$_C$, X$_D$\\
-q$_r$[X] 3: X$_A$, X$_B$, X$_C$, X$_D$\\
+q$_r$[X] 1: X$_A$, X$_B$, X$_D$\\
+q$_r$[X] 2: X$_C$\\
+q$_r$[X] 3: X$_C$, X$_A$\\
+q$_r$[X] 4: X$_C$, X$_B$\\
+q$_r$[X] 5: X$_C$, X$_D$\\
+q$_r$[X] 6: X$_C$, X$_A$, X$_B$\\
+q$_r$[X] 7: X$_C$, X$_A$, X$_D$\\
+q$_r$[X] 8: X$_C$, X$_B$, X$_D$\\
+q$_r$[X] 9: X$_C$, X$_A$, X$_B$, X$_D$\\
 
 \subsection*{b)}
 q$_w$[X] = 6\\
@@ -420,6 +429,6 @@ q$_w$[x] 3: X$_C$, X$_D$, X$_A$, X$_B$\\
 
 \subsection*{c)}
 p$_r$(Y) = 1-((1-p$_K$)*(1-p$_L$))-((1-p$_L$)*(1-p$_M$))-((1-p$_M$)*(1-p$_K$))-((1-p$_K$)*(1-p$_L$)*(1-p$_M$))
-To be readable a majority of nodes have to be available, which is 2 in this case. That means that 1-p$_r$(Y) is the probability that mor than 1 node fails.
+To be readable a majority of nodes have to be available, which is 2 in this case. That means that 1-p$_r$(Y) is the probability that more than 1 node fails.
 
 \end{document}
