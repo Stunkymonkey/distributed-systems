@@ -128,6 +128,8 @@ To enforce consistency, the transactions must be aborted when transaction 1 is a
 
 See figure \ref{fig:1c}
 
+Cascading abort does not happen with strict two phase locking because updated information from one transaction is only available for other transactions to read after the transaction either aborted or committed.
+
 \begin{figure}[!ht]
     \centering
     \begin{tikzpicture}
@@ -202,7 +204,7 @@ See figure \ref{fig:1c}
 \section*{2 - Two-Phase Commit}
 \subsection*{a)}
 
-Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'-Message is received. $ N_3 $ will try to resent the 'COMMIT'-Message until it receives the 'ACK'-Message.
+Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'-Message is received. $ N_3 $ will try to resend the 'COMMIT'-Message until it receives the 'ACK'-Message.
 
 \begin{figure}[!ht]
 	\centering
@@ -236,15 +238,15 @@ Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'
 	
 	\draw[densely dotted] (-1, -6.75) -- node[pos=0, above] {$ \text{T}_s $} (13, -6.75);
 	
-	\draw[->] (0, -7) -- node[pos=0.25, below] {ACK} (6, -7.5);
-	\draw[->] (12, -7) -- node[pos=0.25, below] {ACK} (6, -7.5);
+	\draw[->] (6, -7.5) -- node[below] {COMMIT} (4, -8.5);
+	\draw node at (3.8, -8.5) {\Lightning};
+	\draw[->] (6, -7.5) -- node[below] {COMMIT} (8, -8.5);
+	\draw node at (8.2, -8.5) {\Lightning};
 	
-	\draw[->] (6, -8) -- node[below] {COMMIT} (4, -9);
-	\draw node at (3.8, -9) {\Lightning};
-	\draw[->] (6, -8) -- node[below] {COMMIT} (8, -9);
-	\draw node at (8.2, -9) {\Lightning};
-	
-	\draw[densely dotted] (-1, -9.75) -- node[pos=0, above] {$ \text{T}_e $} (13, -9.75);
+	\draw[densely dotted] (-1, -9) -- node[pos=0, above] {$ \text{T}_e $} (13, -9);
+    
+    \draw[->] (0, -9.25) -- node[pos=0.25, below] {ACK} (6, -9.75);
+    \draw[->] (12, -9.25) -- node[pos=0.25, below] {ACK} (6, -9.75);
 	
 	\draw[->] (6, -10) -- node[below] {COMMIT} (3, -11);
 	\draw[->] (6, -10) -- node[below] {COMMIT} (9, -11);
@@ -252,10 +254,10 @@ Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'
 	\draw[->] (3, -11.5) -- node[below] {ACK} (6, -12.5);
 	\draw[->] (9, -11.5) -- node[below] {ACK} (6, -12.5);
 	
-	\draw[line width=0.4mm, blue] (0, -2) -- node[left] {Blocked} (0, -7);
-	\draw[line width=0.4mm, blue] (3, -2) -- node[pos=0.25, left] {Blocked} (3, -11.5);
-	\draw[line width=0.4mm, blue] (9, -2.5) -- node[pos=0.25, left] {Blocked} (9, -11.5);
-	\draw[line width=0.4mm, blue] (12, -2.5) -- node[left] {Blocked} (12, -7);
+	\draw[line width=0.4mm, blue] (0, -2) -- node[left] {Blocked} (0, -6.5);
+	\draw[line width=0.4mm, blue] (3, -2) -- node[pos=0.25, left] {Blocked} (3, -11);
+	\draw[line width=0.4mm, blue] (9, -2.5) -- node[pos=0.25, left] {Blocked} (9, -11);
+	\draw[line width=0.4mm, blue] (12, -2.5) -- node[left] {Blocked} (12, -6.5);
 	\end{tikzpicture}
 	\caption{simple termination protocol}
 	\label{fig:2a}
@@ -263,7 +265,7 @@ Shown in figure~\ref{fig:2a}. $ N_2 $ and $ N_4 $ are blocked until the 'COMMIT'
 
 \subsection*{b)}
 
-Shown in figure~\ref{fig:2b}. $ N_1 $ is getting send a 'DECISION-REQ'-Message to send the 'COMMIT'-Message to $ N_2 $. Same for $ N_5 $ because $ N_4 $ is not reachable.
+Shown in figure~\ref{fig:2b}. $ N_1 $ is getting sent a 'DECISION-REQ'-Message to send the 'COMMIT'-Message to $ N_2 $. Same for $ N_5 $ because $ N_4 $ is not reachable.
 
 \begin{figure}[!ht]
 	\centering
@@ -297,27 +299,24 @@ Shown in figure~\ref{fig:2b}. $ N_1 $ is getting send a 'DECISION-REQ'-Message t
 	
 	\draw[densely dotted] (-1, -6.75) -- node[pos=0, above] {$ \text{T}_s $} (13, -6.75);
 	
-	\draw[->] (0, -7) -- node[pos=0.25, below] {ACK} (6, -7.5);
-	\draw[->] (12, -7) -- node[pos=0.25, below] {ACK} (6, -7.5);
+	\draw[->] (3, -7.5) -- node[pos=0.5, above] {DECISION-REQ} (0, -8);
+	\draw[->] (9, -7.5) -- node[pos=0.5, above] {DECISION-REQ} (12, -8);
 	
-	\draw[->] (6, -8) -- node[pos=0.75, above] {DECISION-REQ} (0, -9);
-	\draw[->] (6, -8) -- node[pos=0.75, above] {DECISION-REQ} (12, -9);
+	\draw[->] (0, -8.5) -- node[below] {COMMIT} (3, -9);
+	\draw[->] (12, -8.5) -- node[below] {COMMIT} (9, -9);
 	
-	\draw[->] (0, -9.5) -- node[below] {COMMIT} (3, -10);
-	\draw[->] (12, -9.5) -- node[below] {COMMIT} (9, -10);
+	\draw[densely dotted] (-1, -9.5) -- node[pos=0, above] {$ \text{T}_e $} (13, -9.5);
+    
+    \draw[->] (3, -10) -- node[below] {ACK} (6, -10.5);
+    \draw[->] (9, -10) -- node[below] {ACK} (6, -10.5);
+    
+    \draw[->] (0, -11) -- node[pos=0.25, below] {ACK} (6, -12);
+    \draw[->] (12, -11) -- node[pos=0.25, below] {ACK} (6, -12);
 	
-	\draw[->] (3, -10.5) -- node[below] {ACK} (0, -11);
-	\draw[->] (9, -10.5) -- node[below] {ACK} (12, -11);
-	
-	\draw[->] (0, -11.5) -- node[pos=0.25, below] {DECISION-ACK} (6, -12);
-	\draw[->] (12, -11.5) -- node[pos=0.25, below] {DECISION-ACK} (6, -12);
-	
-	\draw[densely dotted] (-1, -12.5) -- node[pos=0, above] {$ \text{T}_e $} (13, -12.5);
-	
-	\draw[line width=0.4mm, blue] (0, -2) -- node[left] {Blocked} (0, -7);
-	\draw[line width=0.4mm, blue] (3, -2) -- node[pos=0.25, left] {Blocked} (3, -10.5);
-	\draw[line width=0.4mm, blue] (9, -2.5) -- node[pos=0.25, left] {Blocked} (9, -10.5);
-	\draw[line width=0.4mm, blue] (12, -2.5) -- node[left] {Blocked} (12, -7);
+	\draw[line width=0.4mm, blue] (0, -2) -- node[left] {Blocked} (0, -6.5);
+	\draw[line width=0.4mm, blue] (3, -2) -- node[pos=0.25, left] {Blocked} (3, -9);
+	\draw[line width=0.4mm, blue] (9, -2.5) -- node[pos=0.25, left] {Blocked} (9, -9);
+	\draw[line width=0.4mm, blue] (12, -2.5) -- node[left] {Blocked} (12, -6.5);
 	\end{tikzpicture}
 	\caption{cooperative termination protocol}
 	\label{fig:2b}
@@ -330,13 +329,13 @@ Shown in figure~\ref{fig:2c}.
 \begin{figure}[!ht]
 	\centering
 	\begin{tikzpicture}
-	\draw[->] (0, 0) -- (0, -16);
+	\draw[->] (0, 0) -- (0, -13);
 	\draw[->] (3, 0) -- (3, -2.5);
 	\draw node at (3, -2.7) {\Lightning};
-	\draw[->] (3, -12.5) -- (3, -16);
-	\draw[->] (6, 0) -- (6, -16);
-	\draw[->] (9, 0) -- (9, -16);
-	\draw[->] (12, 0) -- (12, -16);
+	\draw[->] (3, -10) -- (3, -13);
+	\draw[->] (6, 0) -- (6, -13);
+	\draw[->] (9, 0) -- (9, -13);
+	\draw[->] (12, 0) -- (12, -13);
 	
 	\foreach \t/\p in {1/0,2/3,3/6,4/9,5/12} {
 		\draw node at (\p, 1) {\(N_\t\)};
@@ -361,31 +360,27 @@ Shown in figure~\ref{fig:2c}.
 	
 	\draw[densely dotted] (-1, -6.75) -- node[pos=0, above] {$ \text{T}_s $} (13, -6.75);
 	
-	\draw[->] (0, -7) -- node[pos=0.25, below] {ACK} (6, -7.5);
-	\draw[->] (12, -7) -- node[pos=0.25, below] {ACK} (6, -7.5);
+	%\draw[->] (6, -8) -- node[pos=0.75, above] {DECISION-REQ} (0, -9);
+	\draw[->] (9, -7.5) -- node[pos=0.5, above] {DECISION-REQ} (12, -8);
 	
-	\draw[->] (6, -8) -- node[pos=0.75, above] {DECISION-REQ} (0, -9);
-	\draw[->] (6, -8) -- node[pos=0.75, above] {DECISION-REQ} (12, -9);
+	%\draw[->] (0, -9.5) -- node[below] {COMMIT} (2, -10);
+	%\draw node at (2.2, -10) {\Lightning};
+	\draw[->] (12, -9) -- node[below] {COMMIT} (9, -9.5);
 	
-	\draw[->] (0, -9.5) -- node[below] {COMMIT} (2, -10);
-	\draw node at (2.2, -10) {\Lightning};
-	\draw[->] (12, -9.5) -- node[below] {COMMIT} (9, -10);
+	\draw[densely dotted] (-1, -10) -- node[pos=0, above] {$ \text{T}_e $} (13, -10);
+    
+    \draw[->] (6, -10.25) -- node[below] {COMMIT} (3, -10.75);
+    \draw[->] (3, -11) -- node[below] {ACK} (6, -11.5);
+    \draw[->] (9, -10.25) -- node[below] {ACK} (6, -10.75);
+    
+    \draw[->] (0, -11.5) -- node[pos=0.25, below] {ACK} (6, -12.5);
+    \draw[->] (12, -11.5) -- node[pos=0.25, below] {ACK} (6, -12.5);
 	
-	\draw[->] (9, -10.5) -- node[below] {ACK} (12, -11);
-	
-	\draw[->] (0, -11.5) -- node[below] {UNCERTAIN} (6, -12);
-	\draw[->] (12, -11.5) -- node[pos=0.25, below] {DECISION-ACK} (6, -12);
-	
-	\draw[densely dotted] (-1, -12.5) -- node[pos=0, above] {$ \text{T}_e $} (13, -12.5);
-	
-	\draw[->] (6, -13) -- node[below] {COMMIT} (3, -14);
-	\draw[->] (3, -14.5) -- node[below] {ACK} (6, -15);
-	
-	\draw[line width=0.4mm, blue] (0, -2) -- node[left] {Blocked} (0, -7);
+	\draw[line width=0.4mm, blue] (0, -2) -- node[left] {Blocked} (0, -6.5);
 	\draw[line width=0.4mm, blue] (3, -2) -- node[pos=0.25, left] {Blocked} (3, -2.5);
-	\draw[line width=0.4mm, blue] (3, -12.5) -- node[pos=0.25, left] {Blocked} (3, -14.5);
-	\draw[line width=0.4mm, blue] (9, -2.5) -- node[pos=0.25, left] {Blocked} (9, -10.5);
-	\draw[line width=0.4mm, blue] (12, -2.5) -- node[left] {Blocked} (12, -7);
+	\draw[line width=0.4mm, blue] (3, -10) -- node[pos=0.25, left] {Blocked} (3, -10.75);
+	\draw[line width=0.4mm, blue] (9, -2.5) -- node[pos=0.25, left] {Blocked} (9, -9.5);
+	\draw[line width=0.4mm, blue] (12, -2.5) -- node[left] {Blocked} (12, -6.5);
 	\end{tikzpicture}
 	\caption{cooperative termination protocol with node failure}
 	\label{fig:2c}
@@ -396,20 +391,27 @@ Shown in figure~\ref{fig:2c}.
 \subsection*{a)}
 q[X$_A$] = 1\\
 q[X$_B$] = 1\\
-q[X$_C$] = 2\\
+q[X$_C$] = 3\\
 q[X$_D$] = 1\\
 
-q$_w$[X] 1: X$_A$, X$_B$, X$_C$\\
-q$_w$[X] 2: X$_A$, X$_C$, X$_D$\\
-q$_w$[X] 3: X$_B$, X$_C$, X$_D$\\
-q$_w$[X] 3: X$_A$, X$_B$, X$_C$, X$_D$\\
+q$_w$[X] 1: X$_C$, X$_A$ \\
+q$_w$[X] 2: X$_C$, X$_B$ \\
+q$_w$[X] 3: X$_C$, X$_D$ \\
+q$_w$[X] 4: X$_C$, X$_A$, X$_B$ \\
+q$_w$[X] 5: X$_C$, X$_A$, X$_D$ \\
+q$_w$[X] 6: X$_C$, X$_B$, X$_D$ \\
+q$_w$[X] 7: X$_C$, X$_A$, X$_B$, X$_D$\\
 
 
-q$_r$[X] 1: X$_A$, X$_B$, X$_C$\\
-q$_r$[X] 3: X$_A$, X$_B$, X$_D$\\
-q$_r$[X] 2: X$_A$, X$_C$, X$_D$\\
-q$_r$[X] 3: X$_B$, X$_C$, X$_D$\\
-q$_r$[X] 3: X$_A$, X$_B$, X$_C$, X$_D$\\
+q$_r$[X] 1: X$_A$, X$_B$, X$_D$\\
+q$_r$[X] 2: X$_C$\\
+q$_r$[X] 3: X$_C$, X$_A$\\
+q$_r$[X] 4: X$_C$, X$_B$\\
+q$_r$[X] 5: X$_C$, X$_D$\\
+q$_r$[X] 6: X$_C$, X$_A$, X$_B$\\
+q$_r$[X] 7: X$_C$, X$_A$, X$_D$\\
+q$_r$[X] 8: X$_C$, X$_B$, X$_D$\\
+q$_r$[X] 9: X$_C$, X$_A$, X$_B$, X$_D$\\
 
 \subsection*{b)}
 q$_w$[X] = 6\\
@@ -420,6 +422,6 @@ q$_w$[x] 3: X$_C$, X$_D$, X$_A$, X$_B$\\
 
 \subsection*{c)}
 p$_r$(Y) = 1-((1-p$_K$)*(1-p$_L$))-((1-p$_L$)*(1-p$_M$))-((1-p$_M$)*(1-p$_K$))-((1-p$_K$)*(1-p$_L$)*(1-p$_M$))
-To be readable a majority of nodes have to be available, which is 2 in this case. That means that 1-p$_r$(Y) is the probability that mor than 1 node fails.
+To be readable a majority of nodes have to be available, which is 2 in this case. That means that 1-p$_r$(Y) is the probability that more than 1 node fails.
 
 \end{document}
