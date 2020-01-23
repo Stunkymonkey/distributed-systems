@@ -105,7 +105,35 @@ The delivered message $ m_2 $ on $ P_3 $ has to be delayed. The \textcolor{blue}
 
 \subsection*{b)}
 \subsubsection*{i.}
-\subsubsection*{ii.}
+See figure \ref{fig:3b}
+
+\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+	\draw[->, thick] (0, 6) -- (12, 6);
+	\draw[->, thick] (0, 3) -- (12, 3);
+	\draw[->, thick] (0, 0) -- (12, 0);
+	
+	\foreach \t/\p in {1/6,2/3,3/0} {
+		\draw node at (-0.5, \p) {\(P_\t\)};
+	};
+	
+	\draw[->, thick] (1, 6) -- node[pos=0.1, sloped, above] {$ m_1 $} (10, 0);
+	\draw[->, thick] (1, 6) -- node[pos=0.3, sloped, above] {$ m_1 $} (2, 3);
+	
+	\draw[->, thick] (3, 6) -- node[pos=0.1, sloped, above] {$ m_2 $} (11, 0);
+	\draw[->, thick] (3, 6) -- node[pos=0.3, sloped, above] {$ m_2 $} (4, 3);
+	
+	\draw[->, thick] (3, 3) -- node[pos=0.7, sloped, above] {$ < m_1||m_3> $} (7, 6);
+	\draw[->, thick] (3, 3) -- node[pos=0.6, sloped, above] {$ < m_1||m_3> $} (9, 0);
+	
+	\draw[->, thick] (4.5, 3) -- node[pos=0.6, sloped, above] {$ < m_2||m_4> $} (11, 6);
+	\draw[->, thick] (4.5, 3) -- node[pos=0.7, sloped, below] {$ < m_2||m_4> $} (7, 0);
+	\end{tikzpicture}
+	\caption{Execution of Algorithm 1}
+	\label{fig:3b}
+\end{figure}
+\subsubsection*{ii.} Otherwise the total ordering can be violated, and therefore the correctness.
 \subsubsection*{iii.}
 
 \end{document}
