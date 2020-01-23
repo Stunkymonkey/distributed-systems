@@ -46,6 +46,144 @@
 
 \section*{1 - Replication with Atomic Multicast}
 
+\subsection*{a)}
+
+As shown in figure \ref{fig:1a} message M1 is delivered by R1 but not R2.
+This can happen if the sender is faulty as the validity property is only enforced for correct senders.
+If the agreement property is not enforced R2 may never receive the message M1.
+This means that x is not replicated and R2 has a stale value even though it is still correct.
+
+R2 will however not deliver any other message since it still expects a message with the sequence number of M1 to arrive before delivering any message with a higher sequence number.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[deliver/.style={fill=black,circle, inner sep=0pt, minimum size=5pt}, label/.style={font=\scriptsize}, msg/.style={->}]
+    \node (C1) {C1};
+    \node[below=1cm of C1] (R1) {R1};
+    \node[below=1cm of R1] (R2) {R2};
+    
+    \node[right=6cm of C1] (C1end) {};
+    \node[right=6cm of R1] (R1end) {};
+    \node[right=6cm of R2] (R2end) {};
+    
+    \path[draw, ->]
+        (C1) edge (C1end)
+        (R1) edge (R1end)
+        (R2) edge (R2end)
+        ;
+    
+    \node(m1s) [right=0.5cm of C1] {};
+    \node[deliver] (m1r1) [right=2cm of R1] {};
+    \node[] (m1r2) [below=0.5cm of m1r1] {\Lightning};
+    \node[] (fault) [right=0.5cm of m1s] {\Lightning};
+    
+    \path (m1s.center) edge[msg] node[label] {M1 = write(x)} (m1r1);
+    \path (m1s.center) edge[msg] (m1r2);
+    
+    \end{tikzpicture}
+    \caption{Atomic Multicast without Agreement}
+    \label{fig:1a}
+\end{figure}
+
+
+\subsection*{b)}
+
+Assuming the atomicity property is the total order property from the lecture.
+
+As seen in figure \ref{fig:1b} if the total order of messages is not enforced the actual order messages are delivered at each replica may be different.
+Now both replicas have a different value for x.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[deliver/.style={fill=black,circle, inner sep=0pt, minimum size=5pt}, label/.style={font=\scriptsize}, msg/.style={->}]
+    \node (C1) {C1};
+    \node[below=1cm of C1] (C2) {C2};
+    \node[below=1cm of C2] (R1) {R1};
+    \node[below=1cm of R1] (R2) {R2};
+    
+    \node[right=6cm of C1] (C1end) {};
+    \node[right=6cm of C2] (C2end) {};
+    \node[right=6cm of R1] (R1end) {};
+    \node[right=6cm of R2] (R2end) {};
+    
+    \path[draw, ->]
+        (C1) edge (C1end)
+        (C2) edge (C2end)
+        (R1) edge (R1end)
+        (R2) edge (R2end)
+        ;
+    
+    \node(m1s) [right=0.5cm of C1] {};
+    \node[label] (M1) [below=0.5cm of m1s.east] {M1 = write(x)};
+    \node[deliver] (m1r1) [right=4cm of R1] {};
+    \node[deliver] (m1r2) [right=1.5cm of R2] {};
+    
+    \path (m1s.center) edge[msg] (m1r1);
+    \path (m1s.center) edge[msg] (m1r2);
+    
+    \node(m2s) [right=1.3cm of C2] {};
+    \node[label] (M2) [below right=0.5cm and -0.3cm of m2s] {M2 = write(x)};
+    \node[deliver] (m2r1) [right=2.5cm of R1] {};
+    \node[deliver] (m2r2) [right=5cm of R2] {};
+    
+    \path (m2s.center) edge[msg] (m2r1);
+    \path (m2s.center) edge[msg] (m2r2);
+    
+    \end{tikzpicture}
+    \caption{Atomic Multicast without Atomicity/Total Order}
+    \label{fig:1b}
+\end{figure}
+
+
+\subsection*{c)}
+
+\subsubsection*{i.}
+As seen in figure \ref{fig:1c} if the client does not wait for an acknowledgement for its messages a newer message may get overwritten by an older message that was not yet delivered.
+The total order property only guaranties that the order of delivered messages is the same for all replicas.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[deliver/.style={fill=black,circle, inner sep=0pt, minimum size=5pt}, label/.style={font=\scriptsize}, msg/.style={->}]
+    \node (C1) {C1};
+    \node[below=1cm of C1] (R1) {R1};
+    \node[below=1cm of R1] (R2) {R2};
+    
+    \node[right=6cm of C1] (C1end) {};
+    \node[right=6cm of R1] (R1end) {};
+    \node[right=6cm of R2] (R2end) {};
+    
+    \path[draw, ->]
+        (C1) edge (C1end)
+        (R1) edge (R1end)
+        (R2) edge (R2end)
+        ;
+    
+    \node(m1s) [right=0.5cm of C1] {};
+    \node[label] (M1) [below=0.3cm of m1s.east] {M1 = write(x)};
+    \node[deliver] (m1r1) [right=4cm of R1] {};
+    \node[deliver] (m1r2) [right=5cm of R2] {};
+    
+    \path (m1s.center) edge[msg] (m1r1);
+    \path (m1s.center) edge[msg] (m1r2);
+    
+    \node(m2s) [right=2cm of C1] {};
+    \node[label] (M2) [below right=0.1cm and -0.3cm of m2s] {M2 = write(x)};
+    \node[deliver] (m2r1) [right=3cm of R1] {};
+    \node[deliver] (m2r2) [right=3cm of R2] {};
+    
+    \path (m2s.center) edge[msg] (m2r1);
+    \path (m2s.center) edge[msg] (m2r2);
+    
+    \end{tikzpicture}
+    \caption{Atomic Multicast without synchronous clients}
+    \label{fig:1c}
+\end{figure}
+
+\subsubsection*{ii.}
+
+As causal atomic multicast also includes fifo ordering the wrong arrival order of messages when sending them asynchronously like in figure \ref{fig:1c} cannot happen.
+Messages from the same sender will arrive in the order they were sent.
+
 \section*{2 - Multicast Semantics}
 
 \section*{3 - Causal Mulitcast}
