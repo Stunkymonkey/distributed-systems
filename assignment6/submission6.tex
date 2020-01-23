@@ -88,20 +88,20 @@ See figure \ref{fig:3a}
 	\draw node at (6, 3.3) {$ [1,2,0] $};
 	\draw node at (9.5, 3.3) {$ [1,2,1] $};
 	
-	\draw node at (4, -0.3) {$ [1,1,0] $};
-	\draw node[green] at (6, -0.3) {$ [1,1,0] $};
+	\draw node at (4, -0.3) {$ [0,0,0] $};
+	\draw node at (6, -0.3) {$ [1,0,0] $};
 	\draw node[blue] at (7, 0.3) {$ [1,1,0] $};
 	\draw node at (8, -0.3) {$ [1,1,1] $};
 	\draw node at (10, -0.3) {$ [1,2,1] $};
 	
 	\end{tikzpicture}
-	\caption{Execution of CBCAST Algorith}
+	\caption{Execution of CBCAST Algorithm}
 	\label{fig:3a}
 \end{figure}
 
 \subsubsection*{ii.}
 
-The delivered message $ m_2 $ on $ P_3 $ has to be delayed. The \textcolor{green}{green} VectorClock would be $ [1,0,0] $ and the \textcolor{blue}{blue} $ m_2 $ message would be delayed, so the vector clock would be updated to $ [1,1,0] $ after the recieved $ m_1 $ message.
+The delivered message $ m_2 $ on $ P_3 $ has to be delayed. The \textcolor{blue}{blue} vector clock would be updated to $ [1,1,0] $ after the recieved $ m_1 $ message.
 
 \subsection*{b)}
 \subsubsection*{i.}
