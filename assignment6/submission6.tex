@@ -186,6 +186,38 @@ Messages from the same sender will arrive in the order they were sent.
 
 \section*{2 - Multicast Semantics}
 
+\subsection*{a)}
+
+\subsubsection*{i.}
+False\\
+m$_3$ is delivered to P$_$2 but not to P$_1$ and P$_3$ which are correct.
+\subsubsection*{ii.}
+True\\
+m$_1$, m$_2$ and m$_4$ are send by correct processes and delivered exactly once by P$_1$ and P$_3$
+\subsubsection*{iii.}
+True\\
+Only P$_1$ sends more than 1 messaage. The second one is send after all processes recieved the first one. So it is FIFO multicast.\\
+P$_1$ and P$_2$ are delivering m$_1$ and m$_2$ in diffrent orders. So no atomic multicast.
+\subsubsection*{iv.}
+False\\
+P$_2$ does not deliver m$_1$ but m$_4$, that violates Uniform FIFO.
+\subsection*{b)}
+
+\subsubsection*{i.}
+Reliable Multicast: fullfilled\\
+FIFO Multicast: violated\\
+Causal Multicast: violated\\
+Atomic Multicast: violated\\
+\subsubsection*{ii.}
+Reliable Multicast: violated\\
+FIFO Multicast: violated\\
+Causal Multicast: violated\\
+Atomic Multicast: violated\\
+\subsubsection*{iii.}
+Reliable Multicast: fullfilled\\
+FIFO Multicast: fullfilled\\
+Causal Multicast: fullfilled\\
+Atomic Multicast: violated\\
 \section*{3 - Causal Mulitcast}
 
 \subsection*{a)}
